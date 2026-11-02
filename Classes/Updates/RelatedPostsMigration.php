@@ -44,12 +44,16 @@ final readonly class RelatedPostsMigration implements UpgradeWizardInterface
     {
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::PAGES_TABLE);
         $queryBuilder->getRestrictions()->removeAll();
+        $nullValues = $queryBuilder
+            ->count('uid')
+            ->from(self::PAGES_TABLE)
+            ->where($queryBuilder->expr()->isNull(self::RELATED_POSTS_FIELD))
+            ->executeQuery()
+            ->fetchOne();
 
-        return $queryBuilder->select(self::RELATED_POSTS_FIELD)->from(self::PAGES_TABLE)
-            ->where(
-                $queryBuilder->expr()->isNull(self::RELATED_POSTS_FIELD)
-            )->executeQuery()->rowCount() > 0;
+        return is_numeric($nullValues) && (int)$nullValues > 0;
     }
+
     public function executeUpdate(): bool
     {
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::PAGES_TABLE);
