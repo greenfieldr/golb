@@ -19,8 +19,7 @@
 	"homepage": "https://github.com/greenfieldr/golb",
 	"support": {
 		"issues": "https://github.com/greenfieldr/golb/issues",
-		"source": "https://github.com/greenfieldr/golb",
-		"docs": "https://docs.typo3.org/p/greenfieldr/golb/main/en-us/"
+		"source": "https://github.com/greenfieldr/golb"
 	},
 	"require": {
 		"php": "^8.2",
