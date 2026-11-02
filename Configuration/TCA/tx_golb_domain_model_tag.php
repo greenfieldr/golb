@@ -31,7 +31,6 @@ return [
         'default_sortby' => 'ORDER BY sorting',
         'sortby' => 'sorting',
         'delete' => 'deleted',
-        'searchFields' => 'title',
         'editlock' => 'editlock',
         'enablecolumns' => [
             'disabled' => 'hidden',
@@ -56,13 +55,13 @@ return [
         'crdate' => [
             'label' => 'crdate',
             'config' => [
-                'type' => 'datetime',
+                'type' => 'datetime', 'searchable' => false,
             ],
         ],
         'tstamp' => [
             'label' => 'tstamp',
             'config' => [
-                'type' => 'datetime',
+                'type' => 'datetime', 'searchable' => false,
             ],
         ],
         'sys_language_uid' => [
@@ -125,6 +124,7 @@ return [
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
                 ],
+                'searchable' => false,
             ],
         ],
         'slug' => [
@@ -143,6 +143,7 @@ return [
                 'fallbackCharacter' => '-',
                 'eval' => 'uniqueInSite',
                 'default' => '',
+                'searchable' => false,
             ],
         ],
         'pages' => [

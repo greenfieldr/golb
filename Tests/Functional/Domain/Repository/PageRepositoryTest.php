@@ -21,8 +21,6 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 final class PageRepositoryTest extends FunctionalTestCase
 {
-    protected array $coreExtensionsToLoad = ['install'];
-
     protected array $testExtensionsToLoad = ['greenfieldr/golb'];
 
     private PageRepository $subject;

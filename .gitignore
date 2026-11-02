@@ -17,3 +17,6 @@
 /nbproject/
 .DS_Store
 Thumbs.db
+
+# Rector/TYPO3 bootstrap cache
+/var/

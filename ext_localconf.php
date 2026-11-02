@@ -23,8 +23,7 @@ $boot = function ($packageKey) {
         [
             BlogController::class => 'list',
         ],
-        [],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
+        []
     );
     ExtensionUtility::configurePlugin(
         GeneralUtility::underscoredToUpperCamelCase($packageKey),
@@ -32,8 +31,7 @@ $boot = function ($packageKey) {
         [
             BlogController::class => 'latest',
         ],
-        [],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
+        []
     );
 };
 
