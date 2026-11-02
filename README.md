@@ -29,15 +29,15 @@ composer require greenfieldr/golb
 Then run "Analyze Database Structure", include the static TypoScript "Golb",
 create a blog root page with posts of type "Blog post" and add a *List view*
 or *Latest view* plugin. The full documentation is in the
-[Documentation](Documentation/) folder and rendered on
-[docs.typo3.org](https://docs.typo3.org/p/greenfieldr/golb/main/en-us/).
+[Documentation](Documentation/) folder.
 
 ## Development
 
 ```bash
 composer install
-composer ci     # coding standards, PHPStan, Rector, Fractor, unit and functional tests
-composer fix    # apply automated fixes
+composer ci             # coding standards, PHPStan, Rector, Fractor, unit and functional tests
+composer fix            # apply automated fixes
+composer ci:coverage    # test suites with code coverage (needs PCOV or Xdebug)
 ```
 
 Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/).
