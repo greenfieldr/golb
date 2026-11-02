@@ -50,9 +50,8 @@ class BlogController extends BaseController
     {
         parent::initializeAction();
 
-        $data = $this->getContentObjectData();
-        $this->pages = GeneralUtility::intExplode(',', (string)($data['pages'] ?? ''), true);
-        $this->categories = $this->categoryRepository->findByRelation((int)($data['uid'] ?? 0));
+        $this->pages = GeneralUtility::intExplode(',', $this->getContentObjectField('pages'), true);
+        $this->categories = $this->categoryRepository->findByRelation((int)$this->getContentObjectField('uid'));
 
         if ($this->arguments->hasArgument('demand')) {
             $this->arguments->getArgument('demand')
@@ -103,15 +102,19 @@ class BlogController extends BaseController
 
     /**
      * Completes the demand object with the plugin settings. A demand object
-     * submitted with the request is only used if the plugin allows it.
+     * submitted with the request is only used if the plugin allows it, except
+     * for the current page of the pagination.
      */
     protected function prepareDemandObject(?PostsDemand $demand = null): PostsDemand
     {
         $settings = $this->settings;
         $allowDemandOverwrite = (bool)($settings['allowDemandOverwrite'] ?? false);
 
-        if (!$demand instanceof PostsDemand || !$allowDemandOverwrite) {
+        if (!$demand instanceof PostsDemand) {
             $demand = new PostsDemand();
+        } elseif (!$allowDemandOverwrite) {
+            // Only the pagination argument is taken from the request
+            $demand = (new PostsDemand())->setCurrentPage($demand->getCurrentPage());
         }
 
         if (!$demand->hasCategories()) {

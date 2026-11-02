@@ -34,4 +34,15 @@ abstract class BaseController extends ActionController
     {
         return $this->contentObject->data ?? [];
     }
+
+    /**
+     * Returns a scalar field of the plugin record as string, an empty string
+     * if the field is missing or not scalar.
+     */
+    protected function getContentObjectField(string $field): string
+    {
+        $value = $this->getContentObjectData()[$field] ?? null;
+
+        return is_scalar($value) ? (string)$value : '';
+    }
 }
