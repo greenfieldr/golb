@@ -1,30 +1,106 @@
 {
-  "name": "greenfieldr/golb",
-  "type": "typo3-cms-extension",
-  "description": "Golb - Blog The Page Way!",
-  "homepage": "https://github.com/greenfieldr/golb.git",
-  "license": "GPL-3.0+",
-  "require": {
-    "typo3/cms-core": ">=13.4.0,<=13.4.99"
-  },
-  "autoload": {
-    "psr-4": {
-      "Greenfieldr\\Golb\\": "Classes/"
-    }
-  },
-  "authors": [
-    {
-      "name": "Marcel Küpper",
-      "email": "typo3dev@kuepper.net",
-      "role": "Developer"
-    }
-  ],
-  "extra": {
-    "branch-alias": {
-      "dev-main": "4.0-dev"
-    },
-    "typo3/cms": {
-      "extension-key": "golb"
-    }
-  }
+	"name": "greenfieldr/golb",
+	"description": "Golb - Blog The Page Way! A TYPO3 blog extension that uses regular pages as blog posts.",
+	"license": "GPL-3.0-or-later",
+	"type": "typo3-cms-extension",
+	"keywords": [
+		"TYPO3",
+		"extension",
+		"blog",
+		"golb"
+	],
+	"authors": [
+		{
+			"name": "Marcel Küpper",
+			"email": "typo3dev@kuepper.net",
+			"role": "Developer"
+		}
+	],
+	"homepage": "https://github.com/greenfieldr/golb",
+	"support": {
+		"issues": "https://github.com/greenfieldr/golb/issues",
+		"source": "https://github.com/greenfieldr/golb",
+		"docs": "https://docs.typo3.org/p/greenfieldr/golb/main/en-us/"
+	},
+	"require": {
+		"php": "^8.2",
+		"typo3/cms-core": "^13.4",
+		"typo3/cms-extbase": "^13.4",
+		"typo3/cms-fluid": "^13.4",
+		"typo3/cms-frontend": "^13.4",
+		"typo3/cms-install": "^13.4"
+	},
+	"require-dev": {
+		"a9f/typo3-fractor": "^1.1",
+		"phpstan/extension-installer": "^1.4",
+		"phpstan/phpstan": "^2.1",
+		"saschaegerer/phpstan-typo3": "^2.2",
+		"ssch/typo3-rector": "^3.16",
+		"typo3/coding-standards": "^0.9",
+		"typo3/testing-framework": "^8.3"
+	},
+	"autoload": {
+		"psr-4": {
+			"Greenfieldr\\Golb\\": "Classes/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Greenfieldr\\Golb\\Tests\\": "Tests/"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"a9f/fractor-extension-installer": true,
+			"phpstan/extension-installer": true,
+			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true
+		},
+		"bin-dir": ".Build/bin",
+		"sort-packages": true,
+		"vendor-dir": ".Build/vendor"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-typo3v13": "13.x-dev"
+		},
+		"typo3/cms": {
+			"extension-key": "golb",
+			"web-dir": ".Build/public"
+		}
+	},
+	"scripts": {
+		"ci": [
+			"@ci:composer",
+			"@ci:php",
+			"@ci:tests"
+		],
+		"ci:composer": [
+			"@composer validate --strict"
+		],
+		"ci:fractor": "fractor process --dry-run --config Build/fractor/fractor.php",
+		"ci:php": [
+			"@ci:php:cs",
+			"@ci:php:stan",
+			"@ci:php:rector",
+			"@ci:fractor"
+		],
+		"ci:php:cs": "php-cs-fixer fix --config Build/php-cs-fixer/config.php --dry-run --diff",
+		"ci:php:rector": "rector process --dry-run --config Build/rector/rector.php",
+		"ci:php:stan": "phpstan analyse --configuration Build/phpstan/phpstan.neon --no-progress",
+		"ci:tests": [
+			"@ci:tests:unit",
+			"@ci:tests:functional"
+		],
+		"ci:tests:functional": "phpunit --configuration Build/phpunit/FunctionalTests.xml",
+		"ci:tests:unit": "phpunit --configuration Build/phpunit/UnitTests.xml",
+		"fix": [
+			"@fix:php:rector",
+			"@fix:fractor",
+			"@fix:php:cs"
+		],
+		"fix:fractor": "fractor process --config Build/fractor/fractor.php",
+		"fix:php:cs": "php-cs-fixer fix --config Build/php-cs-fixer/config.php",
+		"fix:php:rector": "rector process --config Build/rector/rector.php"
+	}
 }

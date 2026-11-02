@@ -1,0 +1,9 @@
+# Keep these files out of distribution archives (TER, composer dist).
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.github export-ignore
+/.gitignore export-ignore
+/Build export-ignore
+/Tests export-ignore
+/cliff.toml export-ignore
+/.commitlintrc.json export-ignore

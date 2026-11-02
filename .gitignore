@@ -1,0 +1,19 @@
+# Composer build artefacts
+/.Build/
+/composer.lock
+
+# Tooling caches
+/.php-cs-fixer.cache
+/.phpunit.result.cache
+/.phpunit.cache/
+/Build/.cache/
+
+# Rendered documentation
+/Documentation-GENERATED-temp/
+
+# IDE and OS files
+/.idea/
+/.vscode/
+/nbproject/
+.DS_Store
+Thumbs.db
