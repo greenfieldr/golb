@@ -57,6 +57,8 @@ PHP API
         storage getters never return ``null``.
     *   :php:`Category` has a public constructor and a nullable parent.
     *   :php:`CategoryRepository::findByRelation()` returns an array.
+    *   The Fluid namespace ``golb`` is no longer registered globally; import
+        it in the templates that use the ViewHelper.
     *   :php:`PageRepository::findPosts()` always sorts the result. Without
         a sorting setting posts are sorted by publish date (fallback
         creation date) descending instead of page tree order.

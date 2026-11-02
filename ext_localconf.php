@@ -15,7 +15,6 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 defined('TYPO3') || die();
 
 $boot = function ($packageKey) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['golb'][] = 'Greenfieldr\\Golb\\ViewHelpers';
 
     ExtensionUtility::configurePlugin(
         GeneralUtility::underscoredToUpperCamelCase($packageKey),

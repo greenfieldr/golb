@@ -40,6 +40,10 @@ for TYPO3 14). The file is regenerated with git-cliff on every release.
 
 ### Breaking changes
 
+- The Fluid namespace `golb` is no longer registered globally; import it
+  with `xmlns:golb` in templates using the related posts ViewHelper
+- `Page::setUid()` is removed
+
 - `Page::getAlias()`, `getUrlType()`, `getUrlScheme()`,
   `getCreateUserId()` and their setters are removed;
   `isExtendToSubPages()` is renamed to `isExtendToSubpages()`

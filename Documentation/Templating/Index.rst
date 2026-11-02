@@ -133,8 +133,9 @@ Related posts
 =============
 
 The ViewHelper :html:`<golb:relatedPosts>` finds posts that share tags
-with the current post, best matches first. The Fluid namespace ``golb``
-is registered globally.
+with the current post, best matches first. Import the namespace in the
+template with ``xmlns:golb="http://typo3.org/ns/Greenfieldr/Golb/ViewHelpers"``
+or ``{namespace golb=Greenfieldr\Golb\ViewHelpers}``.
 
 ..  code-block:: html
 
