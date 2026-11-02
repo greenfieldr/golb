@@ -1,0 +1,9 @@
+..  More information about this file:
+    https://docs.typo3.org/m/typo3/writing-guidelines/main/en-us/Reference/Rst/Includes.html
+
+..  role:: typoscript(code)
+..  role:: php(code)
+..  role:: html(code)
+..  role:: xml(code)
+..  highlight:: php
+..  role:: sql(code)
