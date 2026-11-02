@@ -70,7 +70,8 @@ class Category extends AbstractEntity
     public function getParent(): ?Category
     {
         if ($this->parent instanceof LazyLoadingProxy) {
-            $this->parent = $this->parent->_loadRealInstance();
+            $parent = $this->parent->_loadRealInstance();
+            $this->parent = $parent instanceof Category ? $parent : null;
         }
 
         return $this->parent;

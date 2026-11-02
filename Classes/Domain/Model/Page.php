@@ -182,11 +182,6 @@ class Page extends AbstractEntity
         $this->tags = new ObjectStorage();
     }
 
-    public function setUid(int $uid): void
-    {
-        $this->uid = $uid;
-    }
-
     public function getTitle(): string
     {
         return $this->title;
@@ -293,7 +288,8 @@ class Page extends AbstractEntity
     public function getAuthorImage(): ?FileReference
     {
         if ($this->authorImage instanceof LazyLoadingProxy) {
-            $this->authorImage = $this->authorImage->_loadRealInstance();
+            $authorImage = $this->authorImage->_loadRealInstance();
+            $this->authorImage = $authorImage instanceof FileReference ? $authorImage : null;
         }
 
         return $this->authorImage;
