@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TYPO3 extension "golb".
  *
@@ -10,34 +12,54 @@
 
 namespace Greenfieldr\Golb\Domain\Repository;
 
-use TYPO3\CMS\Extbase\Persistence\Generic\Query;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use Greenfieldr\Golb\Domain\Model\Category;
+use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
- * The repository for categories
+ * @extends Repository<Category>
  */
 class CategoryRepository extends Repository
 {
-    /**
-     * @param int $id
-     * @param string $tableName
-     * @param string $fieldName
-     * @return ?QueryResultInterface
-     */
-    public function findByRelation(int $id, string $tableName = 'tt_content', string $fieldName = 'categories'): ?QueryResultInterface
-    {
-        /** @var Query $query */
-        $query = $this->createQuery();
-        $query->statement(
-            'SELECT * '
-            . 'FROM sys_category as cat, sys_category_record_mm as mm '
-            . 'WHERE mm.tablenames = "' . $tableName . '" '
-            . 'AND mm.uid_foreign = ' . $id . ' '
-            . 'AND mm.fieldname = "' . $fieldName . '" '
-            . 'AND cat.uid = mm.uid_local'
-        );
+    public function __construct(
+        private readonly ConnectionPool $connectionPool,
+        private readonly DataMapper $dataMapper
+    ) {
+        parent::__construct();
+    }
 
-        return $query->execute();
+    /**
+     * Returns the categories assigned to a record, by default the categories
+     * selected in a content element (plugin).
+     *
+     * @return Category[]
+     */
+    public function findByRelation(int $id, string $tableName = 'tt_content', string $fieldName = 'categories'): array
+    {
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('sys_category');
+        $rows = $queryBuilder
+            ->select('sys_category.*')
+            ->from('sys_category')
+            ->join(
+                'sys_category',
+                'sys_category_record_mm',
+                'mm',
+                $queryBuilder->expr()->eq('mm.uid_local', $queryBuilder->quoteIdentifier('sys_category.uid'))
+            )
+            ->where(
+                $queryBuilder->expr()->eq('mm.tablenames', $queryBuilder->createNamedParameter($tableName)),
+                $queryBuilder->expr()->eq('mm.fieldname', $queryBuilder->createNamedParameter($fieldName)),
+                $queryBuilder->expr()->eq('mm.uid_foreign', $queryBuilder->createNamedParameter($id, Connection::PARAM_INT))
+            )
+            ->orderBy('mm.sorting_foreign')
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        /** @var Category[] $categories */
+        $categories = $this->dataMapper->map(Category::class, $rows);
+
+        return $categories;
     }
 }

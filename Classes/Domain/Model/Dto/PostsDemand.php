@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TYPO3 extension "golb".
  *
@@ -12,7 +14,12 @@ namespace Greenfieldr\Golb\Domain\Model\Dto;
 
 use Greenfieldr\Golb\Domain\Model\Category;
 
-class PostsDemand implements DemandInterface
+/**
+ * Describes which blog posts should be fetched: filters, sorting and
+ * pagination. A demand object is built from the plugin settings and may be
+ * overridden by request arguments if the plugin allows it.
+ */
+class PostsDemand
 {
     public const LIMIT_DEFAULT = 10;
     public const ITEMS_PER_PAGE_DEFAULT = 10;
@@ -24,24 +31,18 @@ class PostsDemand implements DemandInterface
     public const TOP_POST_DEFAULT = false;
     public const NON_TOP_POST_DEFAULT = false;
 
-    /**
-     * @var ?bool
-     */
-    protected $archived;
+    public const ORDER_DATE = 'date';
+    public const ORDER_CREATION_DATE = 'crdate';
+    public const ORDER_MODIFICATION_DATE = 'tstamp';
+    public const ORDER_TITLE = 'title';
+    public const ORDER_AUTHOR = 'author';
 
-    /**
-     * @var ?bool
-     */
+    protected ?bool $archived = null;
+
     protected ?bool $nonArchived = null;
 
-    /**
-     * @var ?bool
-     */
     protected ?bool $topPost = null;
 
-    /**
-     * @var ?bool
-     */
     protected ?bool $nonTopPost = null;
 
     /**
@@ -49,9 +50,6 @@ class PostsDemand implements DemandInterface
      */
     protected array $categories = [];
 
-    /**
-     * @var ?Category
-     */
     protected ?Category $category = null;
 
     /**
@@ -59,19 +57,10 @@ class PostsDemand implements DemandInterface
      */
     protected array $tags = [];
 
-    /**
-     * @var ?int
-     */
     protected ?int $tag = null;
 
-    /**
-     * @var ?int
-     */
     protected ?int $limit = null;
 
-    /**
-     * @var ?int
-     */
     protected ?int $offset = null;
 
     /**
@@ -79,125 +68,73 @@ class PostsDemand implements DemandInterface
      */
     protected array $excluded = [];
 
-    /**
-     * @var ?string
-     */
     protected ?string $order = null;
 
-    /**
-     * @var ?string
-     */
     protected ?string $orderDirection = null;
 
-    /**
-     * @var int
-     */
     protected int $currentPage = 1;
 
-    /**
-     * @var int
-     */
     protected int $itemsPerPage = 0;
 
-    /**
-     * @return bool
-     */
     public function isArchived(): bool
     {
-        return ($this->isArchivedSet()) ? $this->archived : self::ARCHIVED_DEFAULT;
+        return $this->archived ?? self::ARCHIVED_DEFAULT;
     }
 
-    /**
-     * @return bool
-     */
     public function isArchivedSet(): bool
     {
         return $this->archived !== null;
     }
 
-    /**
-     * @param bool $archived
-     * @return PostsDemand
-     */
-    public function setArchived(bool $archived): PostsDemand
+    public function setArchived(bool $archived): static
     {
         $this->archived = $archived;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isNonArchived(): bool
     {
-        return ($this->isNonArchivedSet()) ? $this->nonArchived : self::NON_ARCHIVED_DEFAULT;
+        return $this->nonArchived ?? self::NON_ARCHIVED_DEFAULT;
     }
 
-    /**
-     * @return bool
-     */
     public function isNonArchivedSet(): bool
     {
         return $this->nonArchived !== null;
     }
 
-    /**
-     * @param bool $nonArchived
-     * @return PostsDemand
-     */
-    public function setNonArchived(bool $nonArchived): PostsDemand
+    public function setNonArchived(bool $nonArchived): static
     {
         $this->nonArchived = $nonArchived;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isTopPost(): bool
     {
-        return ($this->isTopPostSet()) ? $this->topPost : self::TOP_POST_DEFAULT;
+        return $this->topPost ?? self::TOP_POST_DEFAULT;
     }
 
-    /**
-     * @return bool
-     */
     public function isTopPostSet(): bool
     {
         return $this->topPost !== null;
     }
 
-    /**
-     * @param bool $topPost
-     * @return PostsDemand
-     */
-    public function setTopPost(bool $topPost): PostsDemand
+    public function setTopPost(bool $topPost): static
     {
         $this->topPost = $topPost;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isNonTopPost(): bool
     {
-        return ($this->isNonTopPostSet()) ? $this->nonTopPost : self::NON_TOP_POST_DEFAULT;
+        return $this->nonTopPost ?? self::NON_TOP_POST_DEFAULT;
     }
 
-    /**
-     * @return bool
-     */
     public function isNonTopPostSet(): bool
     {
         return $this->nonTopPost !== null;
     }
 
-    /**
-     * @param bool $nonTopPost
-     * @return PostsDemand
-     */
-    public function setNonTopPost(bool $nonTopPost): PostsDemand
+    public function setNonTopPost(bool $nonTopPost): static
     {
         $this->nonTopPost = $nonTopPost;
         return $this;
@@ -212,126 +149,100 @@ class PostsDemand implements DemandInterface
     }
 
     /**
-     * @param array $categories
-     * @return PostsDemand
+     * @param Category[] $categories
      */
-    public function setCategories(array $categories): PostsDemand
+    public function setCategories(array $categories): static
     {
         $this->categories = $categories;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasCategories(): bool
     {
-        return count($this->categories) > 0;
+        return $this->categories !== [];
     }
 
-    /**
-     * @return ?Category
-     */
     public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    /**
-     * @param Category $category
-     */
-    public function setCategory(Category $category): void
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
+        return $this;
     }
 
     /**
+     * Returns the tag uids to filter by, including the single tag if set.
+     *
      * @return int[]
      */
     public function getTags(): array
     {
-        if ($this->tag !== null) {
-            $this->tags[] = $this->tag;
+        $tags = $this->tags;
+        if ($this->tag !== null && !in_array($this->tag, $tags, true)) {
+            $tags[] = $this->tag;
         }
 
-        return $this->tags;
+        return $tags;
     }
 
     /**
-     * @param int $tag
-     * @return PostsDemand
+     * Sets a single tag uid, e.g. for speaking URLs.
      */
-    public function setTag(int $tag): PostsDemand
+    public function setTag(?int $tag): static
     {
         $this->tag = $tag;
         return $this;
     }
 
+    public function getTag(): ?int
+    {
+        return $this->tag;
+    }
+
     /**
      * @param int[] $tags
-     * @return PostsDemand
      */
-    public function setTags(array $tags): PostsDemand
+    public function setTags(array $tags): static
     {
-        $this->tags = $tags;
+        $this->tags = array_map(intval(...), $tags);
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasTags(): bool
     {
-        return count($this->tags) > 0 || $this->tag !== null;
+        return $this->tags !== [] || $this->tag !== null;
     }
 
-    /**
-     * @return int
-     */
     public function getLimit(): int
     {
-        return ($this->hasLimit()) ? $this->limit : self::LIMIT_DEFAULT;
+        return $this->limit ?? self::LIMIT_DEFAULT;
     }
 
-    /**
-     * @param int $limit
-     * @return PostsDemand
-     */
-    public function setLimit(int $limit): PostsDemand
+    public function setLimit(int $limit): static
     {
         $this->limit = $limit;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasLimit(): bool
     {
         return $this->limit !== null;
     }
 
-    /**
-     * @return int
-     */
     public function getOffset(): int
     {
-        return ($this->hasOffset()) ? $this->offset : self::OFFSET_DEFAULT;
+        return $this->offset ?? self::OFFSET_DEFAULT;
     }
 
-    /**
-     * @param int $offset
-     * @return PostsDemand
-     */
-    public function setOffset(int $offset): PostsDemand
+    public function setOffset(int $offset): static
     {
         $this->offset = $offset;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasOffset(): bool
     {
         return $this->offset !== null;
@@ -347,112 +258,74 @@ class PostsDemand implements DemandInterface
 
     /**
      * @param int[] $excluded
-     * @return PostsDemand
      */
-    public function setExcluded(array $excluded): PostsDemand
+    public function setExcluded(array $excluded): static
     {
-        $this->excluded = $excluded;
+        $this->excluded = array_map(intval(...), $excluded);
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasExcluded(): bool
     {
-        return count($this->excluded) > 0;
+        return $this->excluded !== [];
     }
 
-    /**
-     * @return string
-     */
     public function getOrder(): string
     {
-        return ($this->hasOrder()) ? $this->order : self::ORDER_DEFAULT;
+        return $this->order ?? self::ORDER_DEFAULT;
     }
 
-    /**
-     * @param string $order
-     * @return PostsDemand
-     */
-    public function setOrder(string $order): PostsDemand
+    public function setOrder(string $order): static
     {
         $this->order = $order;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasOrder(): bool
     {
         return $this->order !== null;
     }
 
-    /**
-     * @return string
-     */
     public function getOrderDirection(): string
     {
-        return ($this->hasOrderDirection()) ? $this->orderDirection : self::ORDER_DIRECTION_DEFAULT;
+        return $this->orderDirection ?? self::ORDER_DIRECTION_DEFAULT;
     }
 
-    /**
-     * @return bool
-     */
     public function hasOrderDirection(): bool
     {
         return $this->orderDirection !== null;
     }
 
-    /**
-     * @param string $orderDirection
-     * @return PostsDemand
-     */
-    public function setOrderDirection(string $orderDirection): PostsDemand
+    public function setOrderDirection(string $orderDirection): static
     {
-        $this->orderDirection = $orderDirection;
+        $this->orderDirection = strtoupper($orderDirection);
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCurrentPage(): int
     {
         return $this->currentPage;
     }
 
-    /**
-     * @param int $currentPage
-     */
-    public function setCurrentPage(int $currentPage): void
+    public function setCurrentPage(int $currentPage): static
     {
-        $this->currentPage = $currentPage;
+        $this->currentPage = max(1, $currentPage);
+        return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function hasItemsPerPage(): bool
     {
         return $this->itemsPerPage > 0;
     }
 
-    /**
-     * @return int
-     */
     public function getItemsPerPage(): int
     {
         return $this->hasItemsPerPage() ? $this->itemsPerPage : self::ITEMS_PER_PAGE_DEFAULT;
     }
 
-    /**
-     * @param int $itemsPerPage
-     */
-    public function setItemsPerPage(int $itemsPerPage): void
+    public function setItemsPerPage(int $itemsPerPage): static
     {
         $this->itemsPerPage = $itemsPerPage;
+        return $this;
     }
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TYPO3 extension "golb".
  *
@@ -17,12 +19,10 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /**
- * The repository for tags
+ * @extends Repository<Tag>
  */
 class TagRepository extends Repository
 {
-    protected $defaultQuerySettings;
-
     protected $defaultOrderings = [
         'title' => QueryInterface::ORDER_ASCENDING,
         'uid' => QueryInterface::ORDER_ASCENDING,
@@ -30,32 +30,26 @@ class TagRepository extends Repository
 
     public function initializeObject(): void
     {
-        $this->defaultQuerySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
-        $this->defaultQuerySettings->setRespectStoragePage(false);
-        $this->defaultQuerySettings->setIgnoreEnableFields(false);
-        $this->defaultQuerySettings->setRespectSysLanguage(true);
-        $this->setDefaultQuerySettings($this->defaultQuerySettings);
+        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
+        $querySettings->setRespectStoragePage(false);
+        $querySettings->setIgnoreEnableFields(false);
+        $querySettings->setRespectSysLanguage(true);
+        $this->setDefaultQuerySettings($querySettings);
     }
 
+    /**
+     * Returns all tags that are assigned to at least one blog post.
+     *
+     * @return Tag[]
+     */
     public function findAllWithAtLeastOneBlogPost(): array
     {
-        $query = $this->createQuery();
+        /** @var Tag[] $tags */
+        $tags = $this->findAll()->toArray();
 
-        $querySettings = $query->getQuerySettings();
-        $querySettings->setRespectStoragePage(false);
-        $query->setQuerySettings($querySettings);
-
-        $result = $query->execute()->toArray();
-
-        /** @var Tag $tag */
-        foreach ($result as $key => $tag) {
-            if ($tag->getPages() === null) {
-                unset($result[$key]);
-            } elseif ($tag->getPages()->count() === 0) {
-                unset($result[$key]);
-            }
-        }
-
-        return $result;
+        return array_values(array_filter(
+            $tags,
+            static fn(Tag $tag): bool => $tag->getPages()->count() > 0
+        ));
     }
 }
