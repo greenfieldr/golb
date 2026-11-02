@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  release:
+    name: GitHub release and TER upload
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: intl, mbstring, zip
+          coverage: none
+          tools: composer:v2
+
+      - name: Resolve version
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate release notes
+        uses: orhun/git-cliff-action@v4
+        id: changelog
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.version.outputs.version }}
+          body: ${{ steps.changelog.outputs.content }}
+
+      - name: Install TYPO3 Tailor
+        run: composer global require typo3/tailor --no-interaction --no-progress
+
+      # Requires the repository secret TYPO3_API_TOKEN (an access token
+      # created at https://extensions.typo3.org/my-access-tokens). The upload
+      # uses the GitHub archive of the tag, so files marked export-ignore in
+      # .gitattributes are not shipped.
+      - name: Publish to TER
+        if: ${{ secrets.TYPO3_API_TOKEN != '' }}
+        env:
+          TYPO3_API_TOKEN: ${{ secrets.TYPO3_API_TOKEN }}
+          TYPO3_EXTENSION_KEY: golb
+          RELEASE_NOTES: ${{ steps.changelog.outputs.content }}
+        run: |
+          "$(composer global config bin-dir --absolute --quiet)/tailor" ter:publish \
+            --comment "$(printf '%s' "$RELEASE_NOTES" | head -c 1900)" \
+            --artefact "https://github.com/${GITHUB_REPOSITORY}/archive/refs/tags/${{ steps.version.outputs.version }}.zip" \
+            "${{ steps.version.outputs.version }}" golb
