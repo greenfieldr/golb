@@ -18,6 +18,7 @@ use Ssch\TYPO3Rector\CodeQuality\General\ConvertImplicitVariablesToExplicitGloba
 use Ssch\TYPO3Rector\Configuration\Typo3Option;
 use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
 use Ssch\TYPO3Rector\Set\Typo3SetList;
+use Ssch\TYPO3Rector\TYPO311\v5\MigrateExtbaseViewInterfaceRector;
 
 $extensionRoot = dirname(__DIR__, 2);
 
@@ -27,7 +28,6 @@ return RectorConfig::configure()
         $extensionRoot . '/Configuration',
         $extensionRoot . '/Tests',
         $extensionRoot . '/ext_localconf.php',
-        $extensionRoot . '/ext_tables.php',
     ])
     ->withPhpVersion(PhpVersion::PHP_82)
     ->withSets([
@@ -44,6 +44,8 @@ return RectorConfig::configure()
     ->withCache($extensionRoot . '/.Build/.cache/rector')
     ->withSkip([
         ConvertImplicitVariablesToExplicitGlobalsRector::class,
+        // initializeView() is typed against the core ViewInterface (TYPO3 13+)
+        MigrateExtbaseViewInterfaceRector::class,
         $extensionRoot . '/.Build/*',
         $extensionRoot . '/Build/*',
     ]);
