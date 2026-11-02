@@ -1,11 +1,11 @@
 name: Commit messages
 
+# Pull requests are linted completely. On a push only the head commit is
+# checked, because the history before the switch to conventional commits
+# would fail the check on fast-forwards of the release branches.
 on:
   pull_request:
   push:
-    branches:
-      - main
-      - 'typo3v*'
 
 jobs:
   commitlint:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -21,3 +21,4 @@ jobs:
         uses: wagoid/commitlint-github-action@v6
         with:
           configFile: .commitlintrc.json
+          commitDepth: ${{ github.event_name == 'push' && 1 || 0 }}
