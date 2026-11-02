@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Greenfieldr\Golb\Domain\Model;
-
 /*
- * This file is part of TYPO3 CMS-based extension "golb".
+ * This file is part of the TYPO3 extension "golb".
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 3
  * of the License, or any later version.
  */
+
+namespace Greenfieldr\Golb\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
@@ -20,11 +20,9 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
  * @author     Sascha Zander <sascha.zander@denkwerk.com>
  * @copyright  2015 Copyright belongs to the respective authors
  * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @package Greenfieldr\Golb\Domain\Model
  */
 class ContentElement extends AbstractEntity
 {
-
     /**
      * Contains body text
      * Maps on field "bodytext"
@@ -190,7 +188,6 @@ class ContentElement extends AbstractEntity
      * Sets body text
      *
      * @param string $bodyText
-     * @return void
      */
     public function setBodyText(string $bodyText): void
     {
@@ -211,7 +208,6 @@ class ContentElement extends AbstractEntity
      * Set content type
      *
      * @param string $cType
-     * @return void
      */
     public function setCType(string $cType): void
     {
@@ -232,7 +228,6 @@ class ContentElement extends AbstractEntity
      * Sets create date
      *
      * @param int $crDate
-     * @return void
      */
     public function setCrDate(int $crDate): void
     {
@@ -253,7 +248,6 @@ class ContentElement extends AbstractEntity
      * Sets create user identifier
      *
      * @param int $crUserId
-     * @return void
      */
     public function setCrUserId(int $crUserId): void
     {
@@ -274,7 +268,6 @@ class ContentElement extends AbstractEntity
      * Sets date
      *
      * @param int $date
-     * @return void
      */
     public function setDate(int $date): void
     {
@@ -295,7 +288,6 @@ class ContentElement extends AbstractEntity
      * Sets deleted flag
      *
      * @param bool $deleted
-     * @return void
      */
     public function setDeleted(bool $deleted): void
     {
@@ -316,7 +308,6 @@ class ContentElement extends AbstractEntity
      * Sets end time
      *
      * @param int $endTime
-     * @return void
      */
     public function setEndTime(int $endTime): void
     {
@@ -337,7 +328,6 @@ class ContentElement extends AbstractEntity
      * Sets frontend user groups
      *
      * @param string $feGroup
-     * @return void
      */
     public function setFeGroup(string $feGroup): void
     {
@@ -358,7 +348,6 @@ class ContentElement extends AbstractEntity
      * Set header text
      *
      * @param string $header
-     * @return void
      */
     public function setHeader(string $header): void
     {
@@ -379,7 +368,6 @@ class ContentElement extends AbstractEntity
      * Set header link
      *
      * @param string $headerLink
-     * @return void
      */
     public function setHeaderLink(string $headerLink): void
     {
@@ -400,7 +388,6 @@ class ContentElement extends AbstractEntity
      * Sets hidden flag
      *
      * @param bool $hidden
-     * @return void
      */
     public function setHidden(bool $hidden): void
     {
@@ -421,7 +408,6 @@ class ContentElement extends AbstractEntity
      * Sets relations to fal images
      *
      * @param string $image
-     * @return void
      */
     public function setImage(string $image): void
     {
@@ -442,7 +428,6 @@ class ContentElement extends AbstractEntity
      * Sets frontend layout
      *
      * @param int $layout
-     * @return void
      */
     public function setLayout(int $layout): void
     {
@@ -463,7 +448,6 @@ class ContentElement extends AbstractEntity
      * Set list type
      *
      * @param string $listType
-     * @return void
      */
     public function setListType(string $listType): void
     {
@@ -484,7 +468,6 @@ class ContentElement extends AbstractEntity
      * Sets relations to media assets
      *
      * @param string $media
-     * @return void
      */
     public function setMedia(string $media): void
     {
@@ -505,7 +488,6 @@ class ContentElement extends AbstractEntity
      * Sets sorting position
      *
      * @param int $sorting
-     * @return void
      */
     public function setSorting(int $sorting): void
     {
@@ -526,7 +508,6 @@ class ContentElement extends AbstractEntity
      * Sets timestamp for start time
      *
      * @param int $startTime
-     * @return void
      */
     public function setStartTime(int $startTime): void
     {
@@ -547,7 +528,6 @@ class ContentElement extends AbstractEntity
      * Set subheader text
      *
      * @param string $subHeader
-     * @return void
      */
     public function setSubHeader(string $subHeader): void
     {
@@ -568,7 +548,6 @@ class ContentElement extends AbstractEntity
      * Sets anchor link target for anchor to this page
      *
      * @param string $target
-     * @return void
      */
     public function setTarget(string $target): void
     {
@@ -589,7 +568,6 @@ class ContentElement extends AbstractEntity
      * Sets timestamp of last system update
      *
      * @param int $timestamp
-     * @return void
      */
     public function setTimestamp(int $timestamp): void
     {

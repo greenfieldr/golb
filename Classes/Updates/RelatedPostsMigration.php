@@ -2,6 +2,14 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the TYPO3 extension "golb".
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 3
+ * of the License, or any later version.
+ */
+
 namespace Greenfieldr\Golb\Updates;
 
 use TYPO3\CMS\Core\Database\Connection;
@@ -12,8 +20,8 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 #[UpgradeWizard('relatedPostsMigration')]
 final readonly class RelatedPostsMigration implements UpgradeWizardInterface
 {
-    protected const PAGES_TABLE = 'pages';
-    protected const RELATED_POSTS_FIELD = 'tx_golb_related';
+    private const PAGES_TABLE = 'pages';
+    private const RELATED_POSTS_FIELD = 'tx_golb_related';
     public function __construct(
         private ConnectionPool $connectionPool,
     ) {}
@@ -34,10 +42,10 @@ final readonly class RelatedPostsMigration implements UpgradeWizardInterface
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::PAGES_TABLE);
         $queryBuilder->getRestrictions()->removeAll();
 
-        return ($queryBuilder->select(self::RELATED_POSTS_FIELD)->from(self::PAGES_TABLE)
+        return $queryBuilder->select(self::RELATED_POSTS_FIELD)->from(self::PAGES_TABLE)
             ->where(
                 $queryBuilder->expr()->isNull(self::RELATED_POSTS_FIELD)
-            )->executeQuery()->rowCount() > 0);
+            )->executeQuery()->rowCount() > 0;
     }
     public function executeUpdate(): bool
     {

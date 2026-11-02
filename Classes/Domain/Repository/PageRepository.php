@@ -1,14 +1,14 @@
 <?php
 
-namespace Greenfieldr\Golb\Domain\Repository;
-
 /*
- * This file is part of TYPO3 CMS-based extension "golb".
+ * This file is part of the TYPO3 extension "golb".
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 3
  * of the License, or any later version.
  */
+
+namespace Greenfieldr\Golb\Domain\Repository;
 
 use Greenfieldr\Golb\Constants;
 use Greenfieldr\Golb\Domain\Model\Category;
@@ -25,6 +25,19 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  */
 class PageRepository extends Repository
 {
+    /**
+     * Property to collect posts
+     *
+     * @var array $posts
+     */
+    protected array $posts = [];
+
+    /**
+     * Property to collect categories
+     *
+     * @var array $categories
+     */
+    protected array $categories = [];
 
     /**
      * Constructs a new Repository
@@ -39,20 +52,6 @@ class PageRepository extends Repository
         $this->defaultQuerySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($this->defaultQuerySettings);
     }
-
-    /**
-     * Property to collect posts
-     *
-     * @var array $posts
-     */
-    protected array $posts = [];
-
-    /**
-     * Property to collect categories
-     *
-     * @var array $categories
-     */
-    protected array $categories = [];
 
     /**
      * Finds latest blog posts recursively
@@ -81,7 +80,7 @@ class PageRepository extends Repository
              * @TODO: Respect order direction from demand object
              */
             switch ($demand->getOrder()) {
-                case "date":
+                case 'date':
                     usort($this->posts, function ($a, $b) {
                         /** @var Page $a */
                         /** @var Page $b */
@@ -100,19 +99,19 @@ class PageRepository extends Repository
                         return $a <=> $b;
                     });
                     break;
-                case "author":
+                case 'author':
                     usort($this->posts, function ($a, $b) {
                         /** @var Page $a */
                         /** @var Page $b */
 
                         /* if no author value is present (''), it will be set as 'zz' to appear latest in array with objects */
-                        $al = ($a->getAuthorName() == '') ? 'zz' : substr(strtolower((string) $a->getAuthorName()), 0, 2);
-                        $bl = ($a->getAuthorName() == '') ? 'zz' : substr(strtolower((string) $b->getAuthorName()), 0, 2);
+                        $al = ($a->getAuthorName() == '') ? 'zz' : substr(strtolower((string)$a->getAuthorName()), 0, 2);
+                        $bl = ($a->getAuthorName() == '') ? 'zz' : substr(strtolower((string)$b->getAuthorName()), 0, 2);
                         return $al <=> $bl;
                     });
                     break;
             }
-            if($demand->getOrderDirection() === 'DESC') {
+            if ($demand->getOrderDirection() === 'DESC') {
                 $this->posts = array_reverse($this->posts);
             }
         }
@@ -125,7 +124,7 @@ class PageRepository extends Repository
             $categoryIds = [];
 
             $allCategories = $demand->getCategories();
-            if($demand->getCategory() instanceof Category) {
+            if ($demand->getCategory() instanceof Category) {
                 $allCategories = array_merge($demand->getCategories(), [$demand->getCategory()]);
             }
 
@@ -153,25 +152,25 @@ class PageRepository extends Repository
         /** @var Page $post */
         foreach ($this->posts as $key => $post) {
             if (in_array($post->getUid(), $demand->getExcluded(), true)) {
-                    unset($this->posts[$key]);
-            } else if ($demand->isArchived() && !$post->isArchived()) {
                 unset($this->posts[$key]);
-            } else if ($demand->isNonArchived() && $post->isArchived()) {
+            } elseif ($demand->isArchived() && !$post->isArchived()) {
                 unset($this->posts[$key]);
-            } else if ($demand->isTopPost() && !$post->isTopPost()) {
+            } elseif ($demand->isNonArchived() && $post->isArchived()) {
                 unset($this->posts[$key]);
-            } else if ($demand->isNonTopPost() && $post->isTopPost()) {
+            } elseif ($demand->isTopPost() && !$post->isTopPost()) {
                 unset($this->posts[$key]);
-            } else if ($demand->hasTags()) {
+            } elseif ($demand->isNonTopPost() && $post->isTopPost()) {
+                unset($this->posts[$key]);
+            } elseif ($demand->hasTags()) {
                 $includeInResult = false;
                 foreach ($post->getTags() as $tag) {
-                    if(in_array($tag->getUid(), $demand->getTags(), true)) {
+                    if (in_array($tag->getUid(), $demand->getTags(), true)) {
                         $includeInResult = true;
                         break;
                     }
                 }
 
-                if(!$includeInResult) {
+                if (!$includeInResult) {
                     unset($this->posts[$key]);
                 }
             }
@@ -206,20 +205,20 @@ class PageRepository extends Repository
         $posts = [];
         /** @var Page $post */
         foreach ($this->posts as $post) {
-            if(
-                $post->getTags()->count() === 0 ||
-                in_array($post->getUid(), $excludeList, true)
+            if (
+                $post->getTags()->count() === 0
+                || in_array($post->getUid(), $excludeList, true)
             ) {
                 continue;
             }
             foreach ($post->getTags() as $tag) {
-                if(in_array($tag->getTitle(), $tags, true)) {
-                    $amount = (array_key_exists($post->getUid(), $posts)) ?
-                        $posts[$post->getUid()]['amount'] + 1 : 1;
+                if (in_array($tag->getTitle(), $tags, true)) {
+                    $amount = (array_key_exists($post->getUid(), $posts))
+                        ? $posts[$post->getUid()]['amount'] + 1 : 1;
 
                     $posts[$post->getUid()] = [
                         'amount' => $amount,
-                        'post' => $post
+                        'post' => $post,
                     ];
                 }
             }
@@ -245,7 +244,7 @@ class PageRepository extends Repository
 
         $language = $this->defaultQuerySettings->getLanguageAspect()->getId();
 
-        if($language > 0) {
+        if ($language > 0) {
             $queryBuilder = $this->connectionPool->getQueryBuilderForTable('pages');
             $queryBuilder->select('uid')
                 ->from('pages')
@@ -294,7 +293,6 @@ class PageRepository extends Repository
      * Adds categories to $this->categories
      *
      * @param array $categories
-     * @return void
      */
     protected function traverseCategories(array $categories)
     {

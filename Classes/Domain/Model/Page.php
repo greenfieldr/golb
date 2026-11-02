@@ -1,14 +1,15 @@
 <?php
 
-namespace Greenfieldr\Golb\Domain\Model;
-
 /*
- * This file is part of TYPO3 CMS-based extension "golb".
+ * This file is part of the TYPO3 extension "golb".
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 3
  * of the License, or any later version.
  */
+
+namespace Greenfieldr\Golb\Domain\Model;
+
 use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -17,12 +18,9 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Maps on table 'pages'
- *
- * @package Greenfieldr\Golb\Domain\Model
  */
 class Page extends AbstractEntity
 {
-
     /**
      * Contains page abstract
      *
@@ -116,7 +114,7 @@ class Page extends AbstractEntity
      *
      * @var ?int $cruserId
      */
-    protected ?int $cruserId = null ;
+    protected ?int $cruserId = null;
 
     /**
      * Deleted flag
@@ -411,7 +409,6 @@ class Page extends AbstractEntity
      * Sets author name
      *
      * @param string $authorName
-     * @return void
      */
     public function setAuthorName(string $authorName): void
     {
@@ -422,7 +419,6 @@ class Page extends AbstractEntity
      * Adds a category
      *
      * @param Category $category
-     * @return void
      */
     public function addCategory(Category $category): void
     {
@@ -433,7 +429,6 @@ class Page extends AbstractEntity
      * Removes a category
      *
      * @param Category $category
-     * @return void
      */
     public function removeCategory(Category $category): void
     {
@@ -456,7 +451,6 @@ class Page extends AbstractEntity
         $this->categories = $categories;
     }
 
-
     /**
      * Returns create date timestamp
      *
@@ -471,7 +465,6 @@ class Page extends AbstractEntity
      * Sets create date
      *
      * @param int $creationDate
-     * @return void
      */
     public function setCreationDate(int $creationDate): void
     {
@@ -492,7 +485,6 @@ class Page extends AbstractEntity
      * Sets create user identifier
      *
      * @param int $createUserId
-     * @return void
      */
     public function setCreateUserId(int $createUserId): void
     {
@@ -523,7 +515,6 @@ class Page extends AbstractEntity
      * Sets document type
      *
      * @param int $documentType
-     * @return void
      */
     public function setDocumentType(int $documentType): void
     {
@@ -544,7 +535,6 @@ class Page extends AbstractEntity
      * Sets end time
      *
      * @param int $endTime
-     * @return void
      */
     public function setEndTime(int $endTime): void
     {
@@ -575,7 +565,6 @@ class Page extends AbstractEntity
      * Sets flag to hide page in navigation
      *
      * @param bool $navHide
-     * @return void
      */
     public function setNavHide(bool $navHide): void
     {
@@ -596,7 +585,6 @@ class Page extends AbstractEntity
      * Sets page identifier for mount point overlay
      *
      * @param int $mountPidOverlay
-     * @return void
      */
     public function setMountPidOverlay(int $mountPidOverlay): void
     {
@@ -618,7 +606,6 @@ class Page extends AbstractEntity
      * Sets navigation title
      *
      * @param string $navigationTitle
-     * @return void
      */
     public function setNavigationTitle(string $navigationTitle): void
     {
@@ -629,7 +616,6 @@ class Page extends AbstractEntity
      * Adds a related page
      *
      * @param Page $relatedPage
-     * @return void
      */
     public function addRelatedPage(Page $relatedPage): void
     {
@@ -640,7 +626,6 @@ class Page extends AbstractEntity
      * Removes a related page
      *
      * @param Page $relatedPage
-     * @return void
      */
     public function removeRelatedPage(Page $relatedPage): void
     {
@@ -661,7 +646,6 @@ class Page extends AbstractEntity
      * Sets flag for site root
      *
      * @param bool $siteRoot
-     * @return void
      */
     public function setSiteRoot(bool $siteRoot): void
     {
@@ -682,7 +666,6 @@ class Page extends AbstractEntity
      * Sets timestamp for start time
      *
      * @param int $startTime
-     * @return void
      */
     public function setStartTime(int $startTime): void
     {
@@ -693,7 +676,6 @@ class Page extends AbstractEntity
      * Adds a subpage
      *
      * @param Page $subpage
-     * @return void
      */
     public function addSubpage(Page $subpage): void
     {
@@ -704,7 +686,6 @@ class Page extends AbstractEntity
      * Removes a subpage
      *
      * @param Page $subpage
-     * @return void
      */
     public function removeSubpage(Page $subpage): void
     {
@@ -741,7 +722,6 @@ class Page extends AbstractEntity
      * Sets timestamp of last system update
      *
      * @param int $timestamp
-     * @return void
      */
     public function setModificationDate(int $timestamp): void
     {
@@ -762,7 +742,6 @@ class Page extends AbstractEntity
      * Sets URL type
      *
      * @param int $urlType
-     * @return void
      */
     public function setUrlType(int $urlType): void
     {
@@ -773,7 +752,6 @@ class Page extends AbstractEntity
      * Adds a content element
      *
      * @param ContentElement $contentElement
-     * @return void
      */
     public function addContentElement(ContentElement $contentElement): void
     {
@@ -784,7 +762,6 @@ class Page extends AbstractEntity
      * Removes a content element
      *
      * @param ContentElement $contentElement
-     * @return void
      */
     public function removeContentElement(ContentElement $contentElement): void
     {
@@ -1137,7 +1114,7 @@ class Page extends AbstractEntity
     {
         $this->urlScheme = $urlScheme;
     }
-    
+
     /**
      * @return ?ObjectStorage
      */
@@ -1174,7 +1151,6 @@ class Page extends AbstractEntity
      * Adds a tag
      *
      * @param Tag $tag
-     * @return void
      */
     public function addTag(Tag $tag): void
     {
@@ -1185,7 +1161,6 @@ class Page extends AbstractEntity
      * Removes a tag
      *
      * @param Tag $tag
-     * @return void
      */
     public function removeTag(Tag $tag): void
     {

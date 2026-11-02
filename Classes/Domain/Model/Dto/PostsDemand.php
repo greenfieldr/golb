@@ -1,33 +1,33 @@
 <?php
 
-namespace Greenfieldr\Golb\Domain\Model\Dto;
-
 /*
- * This file is part of TYPO3 CMS-based extension "golb".
+ * This file is part of the TYPO3 extension "golb".
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 3
  * of the License, or any later version.
  */
 
+namespace Greenfieldr\Golb\Domain\Model\Dto;
+
 use Greenfieldr\Golb\Domain\Model\Category;
 
 class PostsDemand implements DemandInterface
 {
-    const LIMIT_DEFAULT = 10;
-    const ITEMS_PER_PAGE_DEFAULT = 10;
-    const OFFSET_DEFAULT = 0;
-    const ORDER_DEFAULT = 'date';
-    const ORDER_DIRECTION_DEFAULT = 'DESC';
-    const ARCHIVED_DEFAULT = false;
-    const NON_ARCHIVED_DEFAULT = false;
-    const TOP_POST_DEFAULT = false;
-    const NON_TOP_POST_DEFAULT = false;
+    public const LIMIT_DEFAULT = 10;
+    public const ITEMS_PER_PAGE_DEFAULT = 10;
+    public const OFFSET_DEFAULT = 0;
+    public const ORDER_DEFAULT = 'date';
+    public const ORDER_DIRECTION_DEFAULT = 'DESC';
+    public const ARCHIVED_DEFAULT = false;
+    public const NON_ARCHIVED_DEFAULT = false;
+    public const TOP_POST_DEFAULT = false;
+    public const NON_TOP_POST_DEFAULT = false;
 
     /**
      * @var ?bool
      */
-    protected $archived = null;
+    protected $archived;
 
     /**
      * @var ?bool
@@ -250,7 +250,7 @@ class PostsDemand implements DemandInterface
      */
     public function getTags(): array
     {
-        if($this->tag !== null) {
+        if ($this->tag !== null) {
             $this->tags[] = $this->tag;
         }
 

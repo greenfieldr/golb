@@ -1,24 +1,23 @@
 <?php
 
-namespace Greenfieldr\Golb\Domain\Model;
-
 /*
- * This file is part of TYPO3 CMS-based extension "golb".
+ * This file is part of the TYPO3 extension "golb".
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 3
  * of the License, or any later version.
  */
-use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
+
+namespace Greenfieldr\Golb\Domain\Model;
+
 use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Maps on table 'sys_category'
- *
- * @package Greenfieldr\Golb\Domain\Model
  */
 class Category extends AbstractEntity
 {
@@ -100,18 +99,18 @@ class Category extends AbstractEntity
         $this->description = $description;
     }
 
-        /**
-         * Gets the parent category.
-         *
-         * @return ?Category the parent category
-         */
-        public function getParent(): ?Category
-        {
-            if ($this->parent instanceof LazyLoadingProxy) {
-                $this->parent->_loadRealInstance();
-            }
-            return $this->parent;
+    /**
+     * Gets the parent category.
+     *
+     * @return ?Category the parent category
+     */
+    public function getParent(): ?Category
+    {
+        if ($this->parent instanceof LazyLoadingProxy) {
+            $this->parent->_loadRealInstance();
         }
+        return $this->parent;
+    }
 
     /**
      * Sets the parent category.
@@ -127,7 +126,6 @@ class Category extends AbstractEntity
      * Adds a category
      *
      * @param Category $category
-     * @return void
      */
     public function addSubCategory(Category $category): void
     {
@@ -138,7 +136,6 @@ class Category extends AbstractEntity
      * Removes a category
      *
      * @param Category $category
-     * @return void
      */
     public function removeSubCategory(Category $category): void
     {
@@ -159,7 +156,6 @@ class Category extends AbstractEntity
      * Sets categories
      *
      * @param ObjectStorage $categories
-     * @return void
      */
     public function setSubCategories(ObjectStorage $categories): void
     {

@@ -1,7 +1,16 @@
 <?php
-use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+/*
+ * This file is part of the TYPO3 extension "golb".
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 3
+ * of the License, or any later version.
+ */
+
 use Greenfieldr\Golb\Controller\BlogController;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') || die();
 
@@ -12,7 +21,7 @@ $boot = function ($packageKey) {
         GeneralUtility::underscoredToUpperCamelCase($packageKey),
         'ListView',
         [
-            BlogController::class => 'list'
+            BlogController::class => 'list',
         ],
         [],
         ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
@@ -21,7 +30,7 @@ $boot = function ($packageKey) {
         GeneralUtility::underscoredToUpperCamelCase($packageKey),
         'LatestView',
         [
-            BlogController::class => 'latest'
+            BlogController::class => 'latest',
         ],
         [],
         ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT

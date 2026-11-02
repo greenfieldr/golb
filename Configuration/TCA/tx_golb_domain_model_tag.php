@@ -1,5 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
+/*
+ * This file is part of the TYPO3 extension "golb".
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 3
+ * of the License, or any later version.
+ */
 
 use Greenfieldr\Golb\Constants;
 
@@ -28,38 +37,38 @@ return [
             'disabled' => 'hidden',
             'starttime' => 'starttime',
             'endtime' => 'endtime',
-            'fe_group' => 'fe_group'
+            'fe_group' => 'fe_group',
         ],
         'typeicon_classes' => [
-            'default' => 'ext-golb-tag'
+            'default' => 'ext-golb-tag',
         ],
         'security' => [
             'ignorePageTypeRestriction' => true,
-        ]
+        ],
     ],
     'columns' => [
         'pid' => [
             'label' => 'pid',
             'config' => [
-                'type' => 'passthrough'
-            ]
+                'type' => 'passthrough',
+            ],
         ],
         'crdate' => [
             'label' => 'crdate',
             'config' => [
                 'type' => 'datetime',
-            ]
+            ],
         ],
         'tstamp' => [
             'label' => 'tstamp',
             'config' => [
                 'type' => 'datetime',
-            ]
+            ],
         ],
         'sys_language_uid' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
-            'config' => ['type' => 'language']
+            'config' => ['type' => 'language'],
         ],
         'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -73,26 +82,26 @@ return [
                 'foreign_table' => 'tx_golb_domain_model_tag',
                 'foreign_table_where' => 'AND {#tx_golb_domain_model_tag}.{#pid}=###CURRENT_PID### AND {#tx_golb_domain_model_tag}.{#sys_language_uid} IN (-1,0)',
                 'default' => 0,
-            ]
+            ],
         ],
         'l10n_source' => [
             'config' => [
-                'type' => 'passthrough'
-            ]
+                'type' => 'passthrough',
+            ],
         ],
         'l10n_diffsource' => [
             'config' => [
                 'type' => 'passthrough',
-                'default' => ''
-            ]
+                'default' => '',
+            ],
         ],
         'hidden' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
-                'default' => 0
-            ]
+                'default' => 0,
+            ],
         ],
         'title' => [
             'exclude' => false,
@@ -104,7 +113,7 @@ return [
                     'allowLanguageSynchronization' => true,
                 ],
                 'eval' => 'uniqueInPid',
-            ]
+            ],
         ],
         'description' => [
             'exclude' => true,
@@ -116,7 +125,7 @@ return [
                 'behaviour' => [
                     'allowLanguageSynchronization' => true,
                 ],
-            ]
+            ],
         ],
         'slug' => [
             'exclude' => false,
@@ -134,7 +143,7 @@ return [
                 'fallbackCharacter' => '-',
                 'eval' => 'uniqueInSite',
                 'default' => '',
-            ]
+            ],
         ],
         'pages' => [
             'exclude' => true,
@@ -156,7 +165,7 @@ return [
     ],
     'types' => [
         0 => [
-            'showitem' => 'hidden, title, description, slug, pages,'
-        ]
-    ]
+            'showitem' => 'hidden, title, description, slug, pages,',
+        ],
+    ],
 ];

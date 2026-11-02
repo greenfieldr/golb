@@ -1,14 +1,14 @@
 <?php
 
-namespace Greenfieldr\Golb\Domain\Repository;
-
 /*
- * This file is part of TYPO3 CMS-based extension "golb".
+ * This file is part of the TYPO3 extension "golb".
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 3
  * of the License, or any later version.
  */
+
+namespace Greenfieldr\Golb\Domain\Repository;
 
 use Greenfieldr\Golb\Domain\Model\Tag;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -22,10 +22,10 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 class TagRepository extends Repository
 {
     protected $defaultQuerySettings;
-    
+
     protected $defaultOrderings = [
         'title' => QueryInterface::ORDER_ASCENDING,
-        'uid' => QueryInterface::ORDER_ASCENDING
+        'uid' => QueryInterface::ORDER_ASCENDING,
     ];
 
     public function initializeObject(): void
@@ -49,9 +49,9 @@ class TagRepository extends Repository
 
         /** @var Tag $tag */
         foreach ($result as $key => $tag) {
-            if($tag->getPages() === null) {
+            if ($tag->getPages() === null) {
                 unset($result[$key]);
-            } elseif($tag->getPages()->count() === 0) {
+            } elseif ($tag->getPages()->count() === 0) {
                 unset($result[$key]);
             }
         }

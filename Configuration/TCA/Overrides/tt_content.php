@@ -1,6 +1,15 @@
 <?php
-use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+
+/*
+ * This file is part of the TYPO3 extension "golb".
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 3
+ * of the License, or any later version.
+ */
+
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') || die();
 
@@ -31,8 +40,8 @@ $boot = function () {
         $pluginSignatureLatest
     );
 
-    $GLOBALS['TCA']['tt_content']['types'][$pluginSignatureLatest]['showitem'] =
-    $GLOBALS['TCA']['tt_content']['types'][$pluginSignatureList]['showitem'] = '
+    $GLOBALS['TCA']['tt_content']['types'][$pluginSignatureLatest]['showitem']
+    = $GLOBALS['TCA']['tt_content']['types'][$pluginSignatureList]['showitem'] = '
         --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
             --palette--;;general,
             --palette--;;headers,

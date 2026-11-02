@@ -1,26 +1,23 @@
 <?php
 
-namespace Greenfieldr\Golb\Domain\Model;
-
 /*
- * This file is part of TYPO3 CMS-based extension "golb".
+ * This file is part of the TYPO3 extension "golb".
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 3
  * of the License, or any later version.
  */
 
+namespace Greenfieldr\Golb\Domain\Model;
+
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Tag
- *
- * @package Greenfieldr\Golb\Domain\Model
  */
 class Tag extends AbstractEntity
 {
-
     /**
      * @var string
      */

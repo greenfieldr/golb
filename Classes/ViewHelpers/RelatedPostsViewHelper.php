@@ -1,14 +1,14 @@
 <?php
 
-namespace Greenfieldr\Golb\ViewHelpers;
-
 /*
- * This file is part of TYPO3 CMS-based extension "golb".
+ * This file is part of the TYPO3 extension "golb".
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 3
  * of the License, or any later version.
  */
+
+namespace Greenfieldr\Golb\ViewHelpers;
 
 use Greenfieldr\Golb\Domain\Model\Page;
 use Greenfieldr\Golb\Domain\Model\Tag;
@@ -17,7 +17,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * This view helper returns related posts based on tags
- *
  */
 class RelatedPostsViewHelper extends AbstractViewHelper
 {
@@ -42,9 +41,7 @@ class RelatedPostsViewHelper extends AbstractViewHelper
          * Injects PageRepository
          */
         protected PageRepository $pageRepository
-    )
-    {
-    }
+    ) {}
 
     public function initializeArguments(): void
     {
