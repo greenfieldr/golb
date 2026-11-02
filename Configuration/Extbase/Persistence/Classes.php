@@ -21,6 +21,15 @@ return [
             'creationDate' => [
                 'fieldName' => 'crdate',
             ],
+            'extendToSubpages' => [
+                'fieldName' => 'extendToSubpages',
+            ],
+            'lastUpdated' => [
+                'fieldName' => 'lastUpdated',
+            ],
+            'newUntil' => [
+                'fieldName' => 'newUntil',
+            ],
             'authorImage' => [
                 'fieldName' => 'tx_golb_author_image',
             ],
@@ -52,5 +61,10 @@ return [
     ],
     Category::class => [
         'tableName' => 'sys_category',
+        'properties' => [
+            'subCategories' => [
+                'fieldName' => 'tx_golb_sub_categories',
+            ],
+        ],
     ],
 ];

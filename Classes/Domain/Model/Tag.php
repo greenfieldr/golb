@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TYPO3 extension "golb".
  *
@@ -14,114 +16,84 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Tag
+ * A tag that can be assigned to blog posts (table tx_golb_domain_model_tag).
  */
 class Tag extends AbstractEntity
 {
-    /**
-     * @var string
-     */
     protected string $title = '';
 
-    /**
-     * @var string
-     */
     protected string $description = '';
 
-    /**
-     * @var string
-     */
     protected string $slug = '';
 
     /**
-     * @var ?ObjectStorage<Page>
+     * @var ObjectStorage<Page>
      */
-    protected ?ObjectStorage $pages = null;
+    protected ObjectStorage $pages;
 
-    /**
-     * Tag constructor.
-     */
     public function __construct()
     {
-        $this->setPages(new ObjectStorage());
+        $this->initializeObject();
     }
 
-    /**
-     * @return string
-     */
+    public function initializeObject(): void
+    {
+        $this->pages = new ObjectStorage();
+    }
+
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     */
     public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     */
     public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    /**
-     * @return string
-     */
     public function getSlug(): string
     {
         return $this->slug;
     }
 
-    /**
-     * @param string $slug
-     */
     public function setSlug(string $slug): void
     {
         $this->slug = $slug;
     }
+
     /**
-     * @return ?ObjectStorage
+     * @return ObjectStorage<Page>
      */
-    public function getPages(): ?ObjectStorage
+    public function getPages(): ObjectStorage
     {
         return $this->pages;
     }
 
     /**
-     * @param ObjectStorage $pages
+     * @param ObjectStorage<Page> $pages
      */
     public function setPages(ObjectStorage $pages): void
     {
         $this->pages = $pages;
     }
 
-    /**
-     * @param Page $page
-     */
     public function addPage(Page $page): void
     {
         $this->pages->attach($page);
     }
 
-    /**
-     * @param Page $page
-     */
     public function removePage(Page $page): void
     {
-        $this->removePage($page);
+        $this->pages->detach($page);
     }
 }

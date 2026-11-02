@@ -48,6 +48,27 @@ $boot = function () {
     );
 
     $tempColumns = [
+        // System fields are not part of the TCA columns of "pages". They are
+        // exposed as passthrough fields so Extbase can map them onto the Page
+        // model (creation date fallback for sorting, modification date, sorting).
+        'crdate' => [
+            'label' => 'crdate',
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
+        'tstamp' => [
+            'label' => 'tstamp',
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
+        'sorting' => [
+            'label' => 'sorting',
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
         'tx_golb_related' => [
             'exclude' => 0,
             'label' => $ll . 'pages.tx_golb_related',

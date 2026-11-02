@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TYPO3 extension "golb".
  *
@@ -17,39 +19,25 @@ use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Maps on table 'sys_category'
+ * A system category (table sys_category) including its sub categories.
  */
 class Category extends AbstractEntity
 {
-    /**
-     * @var string
-     */
     #[Extbase\Validate(['validator' => 'NotEmpty'])]
     protected string $title = '';
 
-    /**
-     * @var string
-     */
     protected string $description = '';
 
-    /**
-     * @var Category|LazyLoadingProxy
-     */
     #[Lazy]
-    protected Category|LazyLoadingProxy $parent;
+    protected Category|LazyLoadingProxy|null $parent = null;
 
     /**
-     * List of sub categories
-     *
      * @var ObjectStorage<Category>
      */
     #[Lazy]
     protected ObjectStorage $subCategories;
 
-    /**
-     * Initialize object storage
-     */
-    protected function __construct()
+    public function __construct()
     {
         $this->initializeObject();
     }
@@ -59,103 +47,60 @@ class Category extends AbstractEntity
         $this->subCategories = new ObjectStorage();
     }
 
-    /**
-     * Gets the title.
-     *
-     * @return string the title, might be empty
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * Sets the title.
-     *
-     * @param string $title the title to set, may be empty
-     */
     public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * Gets the description.
-     *
-     * @return string the description, might be empty
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * Sets the description.
-     *
-     * @param string $description the description to set, may be empty
-     */
     public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    /**
-     * Gets the parent category.
-     *
-     * @return ?Category the parent category
-     */
     public function getParent(): ?Category
     {
         if ($this->parent instanceof LazyLoadingProxy) {
-            $this->parent->_loadRealInstance();
+            $this->parent = $this->parent->_loadRealInstance();
         }
+
         return $this->parent;
     }
 
-    /**
-     * Sets the parent category.
-     *
-     * @param Category $parent the parent category
-     */
-    public function setParent(Category $parent): void
+    public function setParent(?Category $parent): void
     {
         $this->parent = $parent;
     }
 
-    /**
-     * Adds a category
-     *
-     * @param Category $category
-     */
     public function addSubCategory(Category $category): void
     {
         $this->subCategories->attach($category);
     }
 
-    /**
-     * Removes a category
-     *
-     * @param Category $category
-     */
     public function removeSubCategory(Category $category): void
     {
         $this->subCategories->detach($category);
     }
 
     /**
-     * Returns categories
-     *
-     * @return ?ObjectStorage
+     * @return ObjectStorage<Category>
      */
-    public function getSubCategories(): ?ObjectStorage
+    public function getSubCategories(): ObjectStorage
     {
         return $this->subCategories;
     }
 
     /**
-     * Sets categories
-     *
-     * @param ObjectStorage $categories
+     * @param ObjectStorage<Category> $categories
      */
     public function setSubCategories(ObjectStorage $categories): void
     {
