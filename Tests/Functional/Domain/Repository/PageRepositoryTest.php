@@ -12,13 +12,19 @@ declare(strict_types=1);
 
 namespace Greenfieldr\Golb\Tests\Functional\Domain\Repository;
 
+use Greenfieldr\Golb\Domain\Model\Category;
 use Greenfieldr\Golb\Domain\Model\Dto\PostsDemand;
 use Greenfieldr\Golb\Domain\Model\Page;
 use Greenfieldr\Golb\Domain\Repository\CategoryRepository;
 use Greenfieldr\Golb\Domain\Repository\PageRepository;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
+#[CoversClass(PageRepository::class)]
+#[CoversClass(CategoryRepository::class)]
+#[CoversClass(Page::class)]
+#[CoversClass(Category::class)]
 final class PageRepositoryTest extends FunctionalTestCase
 {
     protected array $testExtensionsToLoad = ['greenfieldr/golb'];
@@ -145,6 +151,8 @@ final class PageRepositoryTest extends FunctionalTestCase
         $categoryRepository = $this->get(CategoryRepository::class);
         $news = $categoryRepository->findByUid(1);
         $tech = $categoryRepository->findByUid(2);
+        self::assertInstanceOf(Category::class, $news);
+        self::assertInstanceOf(Category::class, $tech);
 
         self::assertSame([3, 4], $this->uids($this->subject->findPosts([2], (new PostsDemand())->setCategories([$news]))));
         self::assertSame([3], $this->uids($this->subject->findPosts([2], (new PostsDemand())->setCategory($tech))));

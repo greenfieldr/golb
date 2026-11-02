@@ -1,13 +1,52 @@
-# PHPStan configuration. Extensions (phpstan-typo3, psr-container) are loaded
-# automatically through phpstan/extension-installer.
+# PHPStan configuration. The extensions phpstan-typo3, phpstan-strict-rules,
+# phpstan-phpunit, phpstan-deprecation-rules and phpstan-disallowed-calls are
+# registered automatically through phpstan/extension-installer.
+includes:
+    - ../../.Build/vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
+    - ../../.Build/vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
+    - ../../.Build/vendor/spaze/phpstan-disallowed-calls/disallowed-insecure-calls.neon
+    - ../../.Build/vendor/spaze/phpstan-disallowed-calls/disallowed-loose-calls.neon
+
 parameters:
-    level: 5
+    level: 9
     tmpDir: ../../.Build/.cache/phpstan
+
     paths:
         - ../../Classes
         - ../../Configuration
         - ../../Tests
         - ../../ext_localconf.php
+
     excludePaths:
+        # TCA override files only build arrays; the $GLOBALS['TCA'] access
+        # produces mixed types that cannot be analysed meaningfully.
         - ../../Configuration/TCA/Overrides/*
+
     treatPhpDocTypesAsCertain: false
+
+    disallowedFunctionCalls:
+        -
+            function:
+                - 'var_dump()'
+                - 'xdebug_break()'
+                - 'debug()'
+            message: 'Use logging instead or remove if it was for debugging purposes.'
+        -
+            function: 'header()'
+            message: 'Use the PSR-7 API instead.'
+
+    disallowedStaticCalls:
+        -
+            method:
+                - 'TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump()'
+                - 'TYPO3\CMS\Core\Utility\DebugUtility::debug()'
+            message: 'Use logging instead or remove if it was for debugging purposes.'
+
+    disallowedSuperglobals:
+        -
+            superglobal:
+                - '$_GET'
+                - '$_POST'
+                - '$_FILES'
+                - '$_SERVER'
+            message: 'Use the PSR-7 API instead.'

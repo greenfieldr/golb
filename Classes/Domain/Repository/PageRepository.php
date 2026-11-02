@@ -106,7 +106,8 @@ class PageRepository extends Repository
     public function findSubPagesByPageIds(array $rootPages): array
     {
         $parentIds = array_values(array_unique(array_filter(
-            array_map(static fn($id): int => abs((int)$id), $rootPages)
+            array_map(abs(...), $rootPages),
+            static fn(int $id): bool => $id > 0
         )));
         $pageIds = [];
         while ($parentIds !== []) {
@@ -127,7 +128,7 @@ class PageRepository extends Repository
                 ->executeQuery()
                 ->fetchFirstColumn();
             // Guard against cycles (e.g. via mount points) by ignoring known uids
-            $children = array_values(array_diff(array_map(intval(...), $children), $pageIds));
+            $children = array_values(array_diff($this->toIntegerList($children), $pageIds));
             $pageIds = array_merge($pageIds, $children);
             $parentIds = $children;
         }
@@ -152,7 +153,23 @@ class PageRepository extends Repository
                 ->fetchFirstColumn();
         }
 
-        return array_values(array_unique(array_map(intval(...), $pageIds)));
+        return array_values(array_unique($this->toIntegerList($pageIds)));
+    }
+
+    /**
+     * @param list<mixed> $values
+     * @return list<int>
+     */
+    protected function toIntegerList(array $values): array
+    {
+        $integers = [];
+        foreach ($values as $value) {
+            if (is_int($value) || (is_string($value) && is_numeric($value))) {
+                $integers[] = (int)$value;
+            }
+        }
+
+        return $integers;
     }
 
     /**
