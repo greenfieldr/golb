@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <xliff version="1.0">
     <file source-language="en" datatype="plaintext" original="messages" date="2015-02-10T10:50:35Z" product-name="golb">
         <header/>
@@ -6,7 +6,6 @@
             <trans-unit id="pages.golbTab">
                 <source>Blog</source>
             </trans-unit>
-            
             <trans-unit id="pages.tx_golb_related">
                 <source>Related posts</source>
             </trans-unit>
@@ -37,7 +36,6 @@
             <trans-unit id="pages.tx_golb_author_image">
                 <source>Author image</source>
             </trans-unit>
-
             <trans-unit id="tt_content.golbTab">
                 <source>Blog</source>
             </trans-unit>
@@ -62,11 +60,9 @@
             <trans-unit id="tt_content.tx_golb_archived">
                 <source>Archived only</source>
             </trans-unit>
-
             <trans-unit id="tt_content.tx_golb_allow_demand_overwrite">
                 <source>Allow demand overwrite</source>
             </trans-unit>
-
             <trans-unit id="tx_golb_domain_model_author">
                 <source>Author</source>
             </trans-unit>
@@ -85,8 +81,6 @@
             <trans-unit id="tt_content.excludedPages">
                 <source>Exclude pages</source>
             </trans-unit>
-
-
             <trans-unit id="tx_golb_domain_model_tag">
                 <source>Tag</source>
             </trans-unit>

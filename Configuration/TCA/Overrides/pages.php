@@ -1,32 +1,39 @@
 <?php
-defined('TYPO3') or die();
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use Greenfieldr\Golb\Constants;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
+
+defined('TYPO3') || die();
 
 $boot = function () {
     $ll = 'LLL:EXT:golb/Resources/Private/Language/locallang_db.xlf:';
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTcaSelectItem(
+    ExtensionManagementUtility::addTcaSelectItem(
         'pages',
         'doktype',
         [
-            'LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:doktype.post',
-            (string) \Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE,
-            'apps-pagetree-post',
+            'label' => 'LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:doktype.post',
+            'value' => (string) Constants::BLOG_POST_DOKTYPE,
+            'icon' => 'apps-pagetree-post',
         ],
         '1',
         'after'
     );
 
-    \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule(
+    ArrayUtility::mergeRecursiveWithOverrule(
         $GLOBALS['TCA']['pages'],
         [
             'ctrl' => [
                 'typeicon_classes' => [
-                    (string) \Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE => 'apps-pagetree-post',
-                    (string) \Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE . '-hideinmenu' => 'apps-pagetree-post',
+                    (string) Constants::BLOG_POST_DOKTYPE => 'apps-pagetree-post',
+                    (string) Constants::BLOG_POST_DOKTYPE . '-hideinmenu' => 'apps-pagetree-post',
                 ],
             ],
             'types' => [
-                (string) \Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE =>
-                    $GLOBALS['TCA']['pages']['types'][\TYPO3\CMS\Core\Domain\Repository\PageRepository::DOKTYPE_DEFAULT]
+                (string) Constants::BLOG_POST_DOKTYPE =>
+                    $GLOBALS['TCA']['pages']['types'][PageRepository::DOKTYPE_DEFAULT]
             ]
         ]
     );
@@ -35,13 +42,13 @@ $boot = function () {
         'tx_golb_related' => [
             'exclude' => 0,
             'label' => $ll . 'pages.tx_golb_related',
-            'displayCond' => 'FIELD:doktype:=:'.\Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE,
+            'displayCond' => 'FIELD:doktype:=:'.Constants::BLOG_POST_DOKTYPE,
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
                 'MM' => 'tx_golb_page_related_page_mm',
                 'foreign_table' => 'pages',
-                'foreign_table_where' => ' AND {#pages}.{#doktype} = ' . \Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE . ' AND ({#pages}.{#sys_language_uid} IN (-1,0) OR {#pages}.{#l10n_parent} = 0) ORDER BY pages.title',
+                'foreign_table_where' => ' AND {#pages}.{#doktype} = ' . Constants::BLOG_POST_DOKTYPE . ' AND ({#pages}.{#sys_language_uid} IN (-1,0) OR {#pages}.{#l10n_parent} = 0) ORDER BY pages.title',
                 'size' => 5,
                 'minitems' => 0,
                 'maxitems' => 99,
@@ -55,7 +62,7 @@ $boot = function () {
         'tx_golb_content_elements' => [
             'exclude' => 0,
             'label' => $ll . 'pages.tx_golb_contentElements',
-            'displayCond' => 'FIELD:doktype:=:'.\Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE,
+            'displayCond' => 'FIELD:doktype:=:'.Constants::BLOG_POST_DOKTYPE,
             'config' => [
                 'type' => 'inline',
                 'foreign_table' => 'tt_content',
@@ -67,7 +74,7 @@ $boot = function () {
         'tx_golb_author_image' => [
             'exclude' => 0,
             'label' => $ll . 'pages.tx_golb_author_image',
-            'displayCond' => 'FIELD:doktype:=:'.\Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE,
+            'displayCond' => 'FIELD:doktype:=:'.Constants::BLOG_POST_DOKTYPE,
             'config' => [
                 'type' => 'file',
                 'appearance' => [
@@ -80,7 +87,7 @@ $boot = function () {
         'tx_golb_subpages' => [
             'exclude' => 0,
             'label' => $ll . 'pages.tx_golb_subpages',
-            'displayCond' => 'FIELD:doktype:=:'.\Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE,
+            'displayCond' => 'FIELD:doktype:=:'.Constants::BLOG_POST_DOKTYPE,
             'config' => [
                 'type' => 'inline',
                 'foreign_table' => 'pages',
@@ -90,7 +97,7 @@ $boot = function () {
         ],
         'tx_golb_publish_date' => [
             'label' => $ll . 'pages.tx_golb_publish_date',
-            'displayCond' => 'FIELD:doktype:=:'.\Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE,
+            'displayCond' => 'FIELD:doktype:=:'.Constants::BLOG_POST_DOKTYPE,
             'config' => [
                 'type' => 'datetime',
                 'size' => '13',
@@ -100,7 +107,7 @@ $boot = function () {
         'tx_golb_tags' => [
             'exclude' => true,
             'label' => $ll . 'pages.tx_golb_tags',
-            'displayCond' => 'FIELD:doktype:=:'.\Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE,
+            'displayCond' => 'FIELD:doktype:=:'.Constants::BLOG_POST_DOKTYPE,
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectMultipleSideBySide',
@@ -116,7 +123,7 @@ $boot = function () {
         'tx_golb_archived' => [
             'exclude' => true,
             'label' => $ll . 'pages.tx_golb_archived',
-            'displayCond' => 'FIELD:doktype:=:'.\Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE,
+            'displayCond' => 'FIELD:doktype:=:'.Constants::BLOG_POST_DOKTYPE,
             'config' => [
                 'type' => 'check',
                 'default' => 0
@@ -125,7 +132,7 @@ $boot = function () {
         'tx_golb_top_post' => [
             'exclude' => true,
             'label' => $ll . 'pages.tx_golb_top_post',
-            'displayCond' => 'FIELD:doktype:=:'.\Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE,
+            'displayCond' => 'FIELD:doktype:=:'.Constants::BLOG_POST_DOKTYPE,
             'config' => [
                 'type' => 'check',
                 'default' => 0
@@ -133,18 +140,18 @@ $boot = function () {
         ],
     ];
 
-    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry::class)->add(\Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE, [
+    GeneralUtility::makeInstance(PageDoktypeRegistry::class)->add(Constants::BLOG_POST_DOKTYPE, [
         'type' => 'web',
         'allowedTables' => '*',
     ]);
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $tempColumns);
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    ExtensionManagementUtility::addTCAcolumns('pages', $tempColumns);
+    ExtensionManagementUtility::addToAllTCAtypes(
         'pages',
         '--div--;LLL:EXT:golb/Resources/Private/Language/locallang_db.xlf:pages.golbTab, ' .
             'tx_golb_publish_date, tx_golb_archived, tx_golb_top_post, tx_golb_tags, tx_golb_related'
     );
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    ExtensionManagementUtility::addToAllTCAtypes(
         'pages',
         'tx_golb_author_image',
         '',

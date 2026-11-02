@@ -19,7 +19,6 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\Repository;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * The repository for pages
@@ -27,6 +26,13 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 class PageRepository extends Repository
 {
 
+    /**
+     * Constructs a new Repository
+     */
+    public function __construct(private readonly ConnectionPool $connectionPool)
+    {
+        parent::__construct();
+    }
     public function initializeObject(): void
     {
         $this->defaultQuerySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
@@ -114,12 +120,12 @@ class PageRepository extends Repository
         /**
          * @ToDo: Refactoring needed.
          */
-        if ($demand->hasCategories() || $demand->getCategory() !== null) {
+        if ($demand->hasCategories() || $demand->getCategory() instanceof Category) {
             $this->categories = [];
             $categoryIds = [];
 
             $allCategories = $demand->getCategories();
-            if($demand->getCategory() !== null) {
+            if($demand->getCategory() instanceof Category) {
                 $allCategories = array_merge($demand->getCategories(), [$demand->getCategory()]);
             }
 
@@ -240,7 +246,7 @@ class PageRepository extends Repository
         $language = $this->defaultQuerySettings->getLanguageAspect()->getId();
 
         if($language > 0) {
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
+            $queryBuilder = $this->connectionPool->getQueryBuilderForTable('pages');
             $queryBuilder->select('uid')
                 ->from('pages')
                 ->where(
@@ -268,7 +274,7 @@ class PageRepository extends Repository
             $id = abs($id);
         }
 
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('pages');
         $queryBuilder->select('uid')
             ->from('pages')
             ->where(

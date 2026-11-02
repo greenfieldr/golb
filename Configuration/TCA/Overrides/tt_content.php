@@ -1,28 +1,31 @@
 <?php
-defined('TYPO3') or die();
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+defined('TYPO3') || die();
 
 $boot = function () {
-    $pluginSignatureList = \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+    $pluginSignatureList = ExtensionUtility::registerPlugin(
         'golb',
         'ListView',
         'LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:tt_content.plugin.listView.title',
         'ext-golb-plugin-list-view',
         'Golb'
     );
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+    ExtensionManagementUtility::addPiFlexFormValue(
         '*',
         'FILE:EXT:golb/Configuration/FlexForms/ListView.xml',
         $pluginSignatureList
     );
 
-    $pluginSignatureLatest = \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+    $pluginSignatureLatest = ExtensionUtility::registerPlugin(
         'golb',
         'LatestView',
         'LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:tt_content.plugin.latestView.title',
         'ext-golb-plugin-latest-view',
         'Golb'
     );
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+    ExtensionManagementUtility::addPiFlexFormValue(
         '*',
         'FILE:EXT:golb/Configuration/FlexForms/LatestView.xml',
         $pluginSignatureLatest

@@ -12,14 +12,12 @@ namespace Greenfieldr\Golb\Controller;
 
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
-use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Greenfieldr\Golb\Domain\Model\Dto\PostsDemand;
 use Greenfieldr\Golb\Domain\Repository\CategoryRepository;
 use Greenfieldr\Golb\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3Fluid\Fluid\View\ViewInterface;
 
 /**
@@ -65,7 +63,7 @@ class BlogController extends BaseController
     {
         parent::initializeAction();
 
-        $this->pages = array_map('trim', explode(',', (string) $this->contentObject->data['pages']));
+        $this->pages = array_map(trim(...), explode(',', (string) $this->contentObject->data['pages']));
         $this->categories = $this->categoryRepository->findByRelation($this->contentObject->data['uid'])->toArray();
 
         if($this->arguments->hasArgument('demand')) {
@@ -136,7 +134,7 @@ class BlogController extends BaseController
     protected function prepareDemandObject(PostsDemand $demand = null): PostsDemand
     {
         // Use submitted demand object only if availalbe and allowDemandOverwrite is set.
-        $demand = $demand !== null && $this->settings['allowDemandOverwrite'] ? $demand : new PostsDemand();
+        $demand = $demand instanceof PostsDemand && $this->settings['allowDemandOverwrite'] ? $demand : new PostsDemand();
 
         if(!$demand->hasCategories()) {
             $demand->setCategories($this->categories);

@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <T3DataStructure>
     <sheets>
         <sDEF>
@@ -12,28 +13,28 @@
                             <renderType>selectSingle</renderType>
                             <items>
                                 <numIndex index="0" type="array">
-                                    <numIndex index="0"></numIndex>
-                                    <numIndex index="1"></numIndex>
+                                    <label/>
+                                    <value/>
                                 </numIndex>
                                 <numIndex index="1">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sorting.date</numIndex>
-                                    <numIndex index="1">date</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sorting.date</label>
+                                    <value>date</value>
                                 </numIndex>
                                 <numIndex index="3">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sorting.crdate</numIndex>
-                                    <numIndex index="1">crdate</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sorting.crdate</label>
+                                    <value>crdate</value>
                                 </numIndex>
                                 <numIndex index="2">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sorting.tstamp</numIndex>
-                                    <numIndex index="1">tstamp</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sorting.tstamp</label>
+                                    <value>tstamp</value>
                                 </numIndex>
                                 <numIndex index="4">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sorting.title</numIndex>
-                                    <numIndex index="1">title</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sorting.title</label>
+                                    <value>title</value>
                                 </numIndex>
                                 <numIndex index="5">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sorting.author</numIndex>
-                                    <numIndex index="1">author</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sorting.author</label>
+                                    <value>author</value>
                                 </numIndex>
                             </items>
                         </config>
@@ -45,16 +46,16 @@
                             <renderType>selectSingle</renderType>
                             <items>
                                 <numIndex index="0" type="array">
-                                    <numIndex index="0"></numIndex>
-                                    <numIndex index="1"></numIndex>
+                                    <label/>
+                                    <value/>
                                 </numIndex>
                                 <numIndex index="1">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sortingDirection.ascending</numIndex>
-                                    <numIndex index="1">ASC</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sortingDirection.ascending</label>
+                                    <value>ASC</value>
                                 </numIndex>
                                 <numIndex index="3">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sortingDirection.descending</numIndex>
-                                    <numIndex index="1">DESC</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.sortingDirection.descending</label>
+                                    <value>DESC</value>
                                 </numIndex>
                             </items>
                         </config>
@@ -96,16 +97,16 @@
                             <renderType>selectSingle</renderType>
                             <items>
                                 <numIndex index="0" type="array">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.archived.all</numIndex>
-                                    <numIndex index="1"></numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.archived.all</label>
+                                    <value/>
                                 </numIndex>
                                 <numIndex index="1">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.archived.archivedOnly</numIndex>
-                                    <numIndex index="1">archived</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.archived.archivedOnly</label>
+                                    <value>archived</value>
                                 </numIndex>
                                 <numIndex index="3">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.archived.nonArchivedOnly</numIndex>
-                                    <numIndex index="1">nonArchived</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.archived.nonArchivedOnly</label>
+                                    <value>nonArchived</value>
                                 </numIndex>
                             </items>
                         </config>
@@ -117,16 +118,16 @@
                             <renderType>selectSingle</renderType>
                             <items>
                                 <numIndex index="0" type="array">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.topPosts.all</numIndex>
-                                    <numIndex index="1"></numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.topPosts.all</label>
+                                    <value/>
                                 </numIndex>
                                 <numIndex index="1">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.topPosts.topPostsOnly</numIndex>
-                                    <numIndex index="1">topPosts</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.topPosts.topPostsOnly</label>
+                                    <value>topPosts</value>
                                 </numIndex>
                                 <numIndex index="3">
-                                    <numIndex index="0">LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.topPosts.nonTopPostsOnly</numIndex>
-                                    <numIndex index="1">nonTopPosts</numIndex>
+                                    <label>LLL:EXT:golb/Resources/Private/Language/locallang_be.xlf:flexforms_general.topPosts.nonTopPostsOnly</label>
+                                    <value>nonTopPosts</value>
                                 </numIndex>
                             </items>
                         </config>

@@ -1,5 +1,7 @@
 <?php
-defined('TYPO3') or die();
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+defined('TYPO3') || die();
 
 $boot = function () {
     $tempColumns = [
@@ -15,8 +17,8 @@ $boot = function () {
         ],
     ];
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('sys_category', $tempColumns);
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    ExtensionManagementUtility::addTCAcolumns('sys_category', $tempColumns);
+    ExtensionManagementUtility::addToAllTCAtypes(
         'sys_category',
         'tx_golb_sub_categories'
     );

@@ -1,8 +1,12 @@
 <?php
 declare(strict_types = 1);
 
+use Greenfieldr\Golb\Domain\Model\Page;
+use Greenfieldr\Golb\Domain\Model\ContentElement;
+use Greenfieldr\Golb\Domain\Model\Category;
+
 return [
-    \Greenfieldr\Golb\Domain\Model\Page::class => [
+    Page::class => [
         'tableName' => 'pages',
         'properties' => [
             'creationDate' => [
@@ -34,10 +38,10 @@ return [
             ],
         ],
     ],
-    \Greenfieldr\Golb\Domain\Model\ContentElement::class => [
+    ContentElement::class => [
         'tableName' => 'tt_content',
     ],
-    \Greenfieldr\Golb\Domain\Model\Category::class => [
+    Category::class => [
         'tableName' => 'sys_category',
     ]
 ];

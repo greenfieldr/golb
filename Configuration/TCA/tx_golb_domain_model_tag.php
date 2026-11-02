@@ -1,5 +1,9 @@
 <?php
-defined('TYPO3') or die();
+declare(strict_types=1);
+
+use Greenfieldr\Golb\Constants;
+
+defined('TYPO3') || die();
 
 $ll = 'LLL:EXT:golb/Resources/Private/Language/locallang_db.xlf:';
 
@@ -142,7 +146,7 @@ return [
                 'MM_opposite_field' => 'tx_golb_tags',
                 'MM_oppositeUsage' => [],
                 'foreign_table' => 'pages',
-                'foreign_table_where' => ' AND {#pages}.{#doktype} = ' . \Greenfieldr\Golb\Constants::BLOG_POST_DOKTYPE . ' ORDER BY pages.title',
+                'foreign_table_where' => ' AND {#pages}.{#doktype} = ' . Constants::BLOG_POST_DOKTYPE . ' ORDER BY pages.title',
                 'size' => 10,
                 'minitems' => 0,
                 'maxitems' => 99,
