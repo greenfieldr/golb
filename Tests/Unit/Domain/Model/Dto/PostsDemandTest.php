@@ -14,9 +14,11 @@ namespace Greenfieldr\Golb\Tests\Unit\Domain\Model\Dto;
 
 use Greenfieldr\Golb\Domain\Model\Category;
 use Greenfieldr\Golb\Domain\Model\Dto\PostsDemand;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
+#[CoversClass(PostsDemand::class)]
 final class PostsDemandTest extends UnitTestCase
 {
     #[Test]
@@ -102,6 +104,25 @@ final class PostsDemandTest extends UnitTestCase
         self::assertTrue($demand->hasTags());
         self::assertSame([4], $demand->getTags());
         self::assertSame(4, $demand->getTag());
+
+        $demand->setTag(null);
+        self::assertFalse($demand->hasTags());
+    }
+
+    #[Test]
+    public function flagsCanBeSetIndividually(): void
+    {
+        $demand = (new PostsDemand())->setNonArchived(true)->setTopPost(true)->setNonTopPost(false)->setExcluded([3]);
+
+        self::assertTrue($demand->isNonArchivedSet());
+        self::assertTrue($demand->isNonArchived());
+        self::assertTrue($demand->isTopPostSet());
+        self::assertTrue($demand->isTopPost());
+        self::assertTrue($demand->isNonTopPostSet());
+        self::assertFalse($demand->isNonTopPost());
+        self::assertTrue($demand->hasExcluded());
+        self::assertSame([3], $demand->getExcluded());
+        self::assertFalse($demand->isArchivedSet());
     }
 
     #[Test]

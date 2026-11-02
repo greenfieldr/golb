@@ -15,9 +15,12 @@ namespace Greenfieldr\Golb\Tests\Unit\Domain\Model;
 use Greenfieldr\Golb\Domain\Model\Category;
 use Greenfieldr\Golb\Domain\Model\Page;
 use Greenfieldr\Golb\Domain\Model\Tag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
+#[CoversClass(Tag::class)]
+#[CoversClass(Category::class)]
 final class TagAndCategoryTest extends UnitTestCase
 {
     #[Test]
