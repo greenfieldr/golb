@@ -11,17 +11,17 @@
         project-issues="https://github.com/greenfieldr/golb/issues"
         project-repository="https://github.com/greenfieldr/golb"
         edit-on-github="greenfieldr/golb"
-        edit-on-github-branch="typo3v13"
-        typo3-core-preferred="13.4"
+        edit-on-github-branch="main"
+        typo3-core-preferred="14.3"
     />
     <project
         title="Golb - Blog The Page Way"
-        version="13"
-        release="13.0.0"
+        version="14"
+        release="14.0.0"
         copyright="since 2015 by the authors"
     />
-    <inventory id="t3coreapi" url="https://docs.typo3.org/m/typo3/reference-coreapi/13.4/en-us/"/>
-    <inventory id="t3tca" url="https://docs.typo3.org/m/typo3/reference-tca/13.4/en-us/"/>
-    <inventory id="t3tsref" url="https://docs.typo3.org/m/typo3/reference-typoscript/13.4/en-us/"/>
-    <inventory id="t3viewhelper" url="https://docs.typo3.org/other/typo3/view-helper-reference/13.4/en-us/"/>
+    <inventory id="t3coreapi" url="https://docs.typo3.org/m/typo3/reference-coreapi/14.3/en-us/"/>
+    <inventory id="t3tca" url="https://docs.typo3.org/m/typo3/reference-tca/14.3/en-us/"/>
+    <inventory id="t3tsref" url="https://docs.typo3.org/m/typo3/reference-typoscript/14.3/en-us/"/>
+    <inventory id="t3viewhelper" url="https://docs.typo3.org/other/typo3/view-helper-reference/14.3/en-us/"/>
 </guides>

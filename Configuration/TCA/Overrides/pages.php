@@ -9,11 +9,9 @@
  */
 
 use Greenfieldr\Golb\Constants;
-use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 defined('TYPO3') || die();
 
@@ -170,10 +168,9 @@ $boot = function () {
         ],
     ];
 
-    GeneralUtility::makeInstance(PageDoktypeRegistry::class)->add(Constants::BLOG_POST_DOKTYPE, [
-        'type' => 'web',
-        'allowedTables' => '*',
-    ]);
+    // Since TYPO3 14 the allowed record types of a page type are configured
+    // via TCA (types.<doktype>.allowedRecordTypes). Blog posts allow all
+    // record types, which is the default, so no configuration is needed.
 
     ExtensionManagementUtility::addTCAcolumns('pages', $tempColumns);
     ExtensionManagementUtility::addToAllTCAtypes(

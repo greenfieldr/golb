@@ -9,6 +9,9 @@ for TYPO3 14). The file is regenerated with git-cliff on every release.
 
 ### Features
 
+- Support for TYPO3 14.3 LTS and PHP 8.5; the 14.x line requires
+  TYPO3 14 (the 13.x line stays on the `typo3v13` branch)
+
 - Default templates with a shared post partial, translatable labels and
   a pagination that uses plugin arguments
 
@@ -50,3 +53,4 @@ for TYPO3 14). The file is regenerated with git-cliff on every release.
 - `ext_tables.php` and the `addUserTSConfig()` call are removed (the
   page type is registered in the TCA override, user TSconfig in
   `Configuration/user.tsconfig`)
+- TYPO3 13 is no longer supported by the 14.x line

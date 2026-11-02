@@ -72,6 +72,22 @@ Behaviour fixes worth knowing
 From 13.x to 14.x
 =================
 
-The 14.x line targets TYPO3 14. The templates, TypoScript and the PHP API
-stay compatible; only the TYPO3 and PHP requirements change. Details are
-listed in the release notes of 14.0.0.
+The 14.x line requires TYPO3 14.3 LTS and PHP 8.2 to 8.5. Templates,
+TypoScript, plugin settings and the PHP API of the 13.x line are
+unchanged, so an update of a 13.x installation needs no migration beyond
+the TYPO3 core upgrade itself.
+
+Internal changes made for TYPO3 14:
+
+*   The plugin FlexForms are registered with the ``$flexForm`` argument of
+    :php:`ExtensionUtility::registerPlugin()` instead of the removed
+    :php:`addPiFlexFormValue()`.
+*   The page type is no longer registered with
+    :php:`PageDoktypeRegistry->add()`; blog posts allow all record types,
+    which is the TCA default.
+*   Fluid 5: the default templates and the ViewHelper use strict argument
+    types.
+
+Sites that override the ``Pagination`` partial should check it against
+the Fluid 5 rules (no CDATA sections, no variable names starting with an
+underscore).
