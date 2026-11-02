@@ -1,0 +1,22 @@
+config.no_cache = 1
+
+page = PAGE
+page {
+    10 = FLUIDTEMPLATE
+    10 {
+        template = TEXT
+        template.value (
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:golb="http://typo3.org/ns/Greenfieldr/Golb/ViewHelpers" data-namespace-typo3-fluid="true">
+[post:{blogPost.title}:{blogPost.doktype}]
+<golb:relatedPosts posts="{0: 2}" currentPost="{blogPost}" limit="2" as="related">
+<f:for each="{related}" as="item">[related:{item.post.title}:{item.amount}]</f:for>
+</golb:relatedPosts>
+</html>
+        )
+
+        dataProcessing {
+            10 = Greenfieldr\Golb\DataProcessing\MetaInformationProcessor
+            10.as = blogPost
+        }
+    }
+}

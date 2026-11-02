@@ -13,9 +13,11 @@ declare(strict_types=1);
 namespace Greenfieldr\Golb\Tests\Unit\Domain\Model;
 
 use Greenfieldr\Golb\Domain\Model\Page;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
+#[CoversClass(Page::class)]
 final class PageTest extends UnitTestCase
 {
     #[Test]

@@ -1,0 +1,4 @@
+config.no_cache = 1
+
+page = PAGE
+page.10 < styles.content.get
