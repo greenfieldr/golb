@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <xliff version="1.0">
-    <file source-language="en" datatype="plaintext" original="messages" date="2015-02-10T10:50:35Z" product-name="golb">
+    <file source-language="en" datatype="plaintext" original="messages" date="2025-11-02T12:00:00Z" product-name="golb">
         <header/>
         <body>
             <trans-unit id="pages.golbTab">
@@ -10,19 +10,13 @@
                 <source>Related posts</source>
             </trans-unit>
             <trans-unit id="pages.tx_golb_contentElements">
-                <source>TT Content</source>
+                <source>Content elements</source>
             </trans-unit>
             <trans-unit id="pages.tx_golb_subpages">
                 <source>Sub pages</source>
             </trans-unit>
-            <trans-unit id="pages.tx_golb_categories">
-                <source>Categories</source>
-            </trans-unit>
             <trans-unit id="pages.tx_golb_publish_date">
                 <source>Publish date</source>
-            </trans-unit>
-            <trans-unit id="pages.tx_golb_authors">
-                <source>Authors</source>
             </trans-unit>
             <trans-unit id="pages.tx_golb_tags">
                 <source>Tags</source>
@@ -36,50 +30,8 @@
             <trans-unit id="pages.tx_golb_author_image">
                 <source>Author image</source>
             </trans-unit>
-            <trans-unit id="tt_content.golbTab">
-                <source>Blog</source>
-            </trans-unit>
-            <trans-unit id="tt_content.tx_golb_sorting">
-                <source>Sorting</source>
-            </trans-unit>
-            <trans-unit id="tt_content.tx_golb_sorting_direction">
-                <source>Sorting direction</source>
-            </trans-unit>
-            <trans-unit id="tt_content.tx_golb_limit">
-                <source>Limit</source>
-            </trans-unit>
-            <trans-unit id="tt_content.tx_golb_offset">
-                <source>Offset</source>
-            </trans-unit>
-            <trans-unit id="tt_content.tx_golb_sub_categories">
+            <trans-unit id="sys_category.tx_golb_sub_categories">
                 <source>Subcategories</source>
-            </trans-unit>
-            <trans-unit id="tt_content.excludedPages">
-                <source>Exclude pages</source>
-            </trans-unit>
-            <trans-unit id="tt_content.tx_golb_archived">
-                <source>Archived only</source>
-            </trans-unit>
-            <trans-unit id="tt_content.tx_golb_allow_demand_overwrite">
-                <source>Allow demand overwrite</source>
-            </trans-unit>
-            <trans-unit id="tx_golb_domain_model_author">
-                <source>Author</source>
-            </trans-unit>
-            <trans-unit id="tx_golb_domain_model_author.name">
-                <source>Name</source>
-            </trans-unit>
-            <trans-unit id="tx_golb_domain_model_author.images">
-                <source>Images</source>
-            </trans-unit>
-            <trans-unit id="tx_golb_domain_model_author.website">
-                <source>Website</source>
-            </trans-unit>
-            <trans-unit id="tx_golb_domain_model_author.email">
-                <source>Email</source>
-            </trans-unit>
-            <trans-unit id="tt_content.excludedPages">
-                <source>Exclude pages</source>
             </trans-unit>
             <trans-unit id="tx_golb_domain_model_tag">
                 <source>Tag</source>
@@ -94,7 +46,7 @@
                 <source>Slug</source>
             </trans-unit>
             <trans-unit id="tx_golb_domain_model_tag.pages">
-                <source>Blogposts</source>
+                <source>Blog posts</source>
             </trans-unit>
         </body>
     </file>

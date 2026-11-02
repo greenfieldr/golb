@@ -1,1 +1,3 @@
+# Offer the blog post page type (doktype 41, see Greenfieldr\Golb\Constants)
+# in the "new page" drag area of the page tree.
 options.pageTree.doktypesToShowInNewPageDragArea := addToList(41)

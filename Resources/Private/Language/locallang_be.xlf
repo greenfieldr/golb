@@ -19,7 +19,7 @@
                 <source>Latest View</source>
             </trans-unit>
             <trans-unit id="tt_content.plugin.latestView.description">
-                <source>Shows a list of blog posts based on given plugin settings and a defnied limit.</source>
+                <source>Shows a list of blog posts based on given plugin settings and a defined limit.</source>
             </trans-unit>
             <trans-unit id="flexforms_tab.settings">
                 <source>Plugin settings</source>
@@ -54,6 +54,9 @@
             <trans-unit id="flexforms_general.limit">
                 <source>Limit</source>
             </trans-unit>
+            <trans-unit id="flexforms_general.itemsPerPage">
+                <source>Items per page</source>
+            </trans-unit>
             <trans-unit id="flexforms_general.offset">
                 <source>Offset</source>
             </trans-unit>
@@ -85,7 +88,7 @@
                 <source>Show non-top posts only</source>
             </trans-unit>
             <trans-unit id="flexforms_general.allowDemandOverwrite">
-                <source>Allow demand overrite (e.g. via URL parameters)</source>
+                <source>Allow demand overwrite (e.g. via URL parameters)</source>
             </trans-unit>
         </body>
     </file>

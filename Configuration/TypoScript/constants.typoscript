@@ -7,9 +7,4 @@ plugin.tx_golb {
         # cat=plugin.tx_golb/file; type=string; label=Path to layout files
         layoutRootPath = EXT:golb/Resources/Private/Layouts/
     }
-
-    settings {
-        # cat=plugin.tx_golb/backend; type=string; label= Name of default backend layout
-        defaultBackendLayout = 4
-    }
 }

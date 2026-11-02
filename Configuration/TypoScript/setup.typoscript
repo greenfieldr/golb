@@ -1,23 +1,27 @@
 plugin.tx_golb {
     view {
         templateRootPaths {
+            0 = EXT:golb/Resources/Private/Templates/
             10 = {$plugin.tx_golb.view.templateRootPath}
         }
+
         partialRootPaths {
+            0 = EXT:golb/Resources/Private/Partials/
             10 = {$plugin.tx_golb.view.partialRootPath}
         }
+
         layoutRootPaths {
+            0 = EXT:golb/Resources/Private/Layouts/
             10 = {$plugin.tx_golb.view.layoutRootPath}
         }
-        widget {
-            TYPO3\CMS\Fluid\ViewHelpers\Widget\PaginateViewHelper {
-                templateRootPath = {$plugin.tx_golb.view.templateRootPath}
-            }
-        }
+    }
+
+    settings {
+        # Date format used by the default templates (see f:format.date)
+        dateFormat = %d.%m.%Y
     }
 }
 
-module.tx_golb < plugin.tx_golb
-
-tt_content.golb =< tt_content.list.20.golb_blog
-tt_content.golb.switchableControllerActions.Blog.1 = latest
+# Both plugins (golb_listview, golb_latestview) inherit from plugin.tx_golb
+plugin.tx_golb_listview < plugin.tx_golb
+plugin.tx_golb_latestview < plugin.tx_golb

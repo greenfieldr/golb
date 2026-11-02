@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TYPO3 extension "golb".
  *
@@ -8,17 +10,8 @@
  * of the License, or any later version.
  */
 
-use Greenfieldr\Golb\Constants;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 defined('TYPO3') || die();
 
-$boot = function () {
-    ExtensionManagementUtility::addStaticFile('golb', 'Configuration/TypoScript', 'Golb');
-
-    ExtensionManagementUtility::addUserTSConfig(
-        'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . Constants::BLOG_POST_DOKTYPE . ')'
-    );
-};
-$boot();
-unset($boot);
+ExtensionManagementUtility::addStaticFile('golb', 'Configuration/TypoScript', 'Golb');
