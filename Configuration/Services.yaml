@@ -3,8 +3,10 @@ services:
     autowire: true
     autoconfigure: true
     public: false
+
   Greenfieldr\Golb\:
     resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
+
   Greenfieldr\Golb\DataProcessing\MetaInformationProcessor:
     public: true
-

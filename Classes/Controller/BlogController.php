@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the TYPO3 extension "golb".
  *
@@ -10,6 +12,7 @@
 
 namespace Greenfieldr\Golb\Controller;
 
+use Greenfieldr\Golb\Domain\Model\Category;
 use Greenfieldr\Golb\Domain\Model\Dto\PostsDemand;
 use Greenfieldr\Golb\Domain\Repository\CategoryRepository;
 use Greenfieldr\Golb\Domain\Repository\PageRepository;
@@ -17,152 +20,139 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
-use TYPO3Fluid\Fluid\View\ViewInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 
 /**
- * Class BlogController
+ * Renders lists of blog posts for the "List view" and "Latest view" plugins.
  */
 class BlogController extends BaseController
 {
     /**
-     * Contains array with pages to load blog posts from
+     * Root page uids (plugin field "pages") to collect blog posts from
      *
-     * @var array $pages
+     * @var int[]
      */
-    protected $pages;
+    protected array $pages = [];
 
     /**
-     * Contains categories to filter posts
+     * Categories selected in the plugin record to filter posts by
      *
-     * @var array $categories
+     * @var Category[]
      */
-    protected $categories;
+    protected array $categories = [];
 
-    /**
-     * BlogController constructor.
-     *
-     * @param PageRepository $pageRepository
-     * @param CategoryRepository $categoryRepository
-     */
-    public function __construct(protected PageRepository $pageRepository, protected CategoryRepository $categoryRepository) {}
+    public function __construct(
+        protected readonly PageRepository $pageRepository,
+        protected readonly CategoryRepository $categoryRepository
+    ) {}
 
-    /**
-     * Sets pages and categories properties
-     *
-     * @throws NoSuchArgumentException
-     */
-    #[\Override]
     public function initializeAction(): void
     {
         parent::initializeAction();
 
-        $this->pages = array_map(trim(...), explode(',', (string)$this->contentObject->data['pages']));
-        $this->categories = $this->categoryRepository->findByRelation($this->contentObject->data['uid'])->toArray();
+        $data = $this->getContentObjectData();
+        $this->pages = GeneralUtility::intExplode(',', (string)($data['pages'] ?? ''), true);
+        $this->categories = $this->categoryRepository->findByRelation((int)($data['uid'] ?? 0));
 
         if ($this->arguments->hasArgument('demand')) {
-            $this->arguments->getArgument('demand')->getPropertyMappingConfiguration()
+            $this->arguments->getArgument('demand')
+                ->getPropertyMappingConfiguration()
                 ->allowAllProperties();
         }
     }
 
-    /**
-     * @param ViewInterface $view
-     */
     protected function initializeView(ViewInterface $view): void
     {
-        $view->assign('contentElementData', $this->contentObject->data);
+        $view->assign('contentElementData', $this->getContentObjectData());
     }
 
     /**
-     * Lists latest blog posts
-     *
-     * @param PostsDemand|null $demand
-     * @return ResponseInterface
+     * Lists the latest blog posts (limited, no pagination).
      */
     public function latestAction(?PostsDemand $demand = null): ResponseInterface
     {
         $demand = $this->prepareDemandObject($demand);
-
         $posts = $this->pageRepository->findPosts($this->pages, $demand);
 
         $this->view->assign('demand', $demand);
         $this->view->assign('posts', $posts);
+
         return $this->htmlResponse();
     }
 
     /**
-     * Lists blog posts
-     *
-     * @param PostsDemand|null $demand
-     * @return ResponseInterface
+     * Lists blog posts with pagination.
      */
     public function listAction(?PostsDemand $demand = null): ResponseInterface
     {
         $demand = $this->prepareDemandObject($demand);
-
-        // Reset limit to allow pagination of entries
+        // Fetch all posts, the paginator slices them
         $demand->setLimit(0);
 
-        $paginator = new ArrayPaginator(
-            $this->pageRepository->findPosts($this->pages, $demand),
-            $demand->getCurrentPage(),
-            $demand->getItemsPerPage()
-        );
-
-        /**
-         * ToDo: Feature: Implement SlidingWindowPagination as optional alternative
-         */
+        $posts = $this->pageRepository->findPosts($this->pages, $demand);
+        $paginator = new ArrayPaginator($posts, $demand->getCurrentPage(), $demand->getItemsPerPage());
         $pagination = new SimplePagination($paginator);
 
-        $this->view->assign('pagination', $pagination);
-        $this->view->assign('paginator', $paginator);
         $this->view->assign('demand', $demand);
+        $this->view->assign('posts', $posts);
+        $this->view->assign('paginator', $paginator);
+        $this->view->assign('pagination', $pagination);
+
         return $this->htmlResponse();
     }
 
     /**
-     * @param PostsDemand|null $demand
-     * @return PostsDemand
+     * Completes the demand object with the plugin settings. A demand object
+     * submitted with the request is only used if the plugin allows it.
      */
     protected function prepareDemandObject(?PostsDemand $demand = null): PostsDemand
     {
-        // Use submitted demand object only if availalbe and allowDemandOverwrite is set.
-        $demand = $demand instanceof PostsDemand && $this->settings['allowDemandOverwrite'] ? $demand : new PostsDemand();
+        $settings = $this->settings;
+        $allowDemandOverwrite = (bool)($settings['allowDemandOverwrite'] ?? false);
+
+        if (!$demand instanceof PostsDemand || !$allowDemandOverwrite) {
+            $demand = new PostsDemand();
+        }
 
         if (!$demand->hasCategories()) {
             $demand->setCategories($this->categories);
         }
         if (!$demand->hasExcluded()) {
-            $excluded = GeneralUtility::trimExplode(',', $this->settings['exclude']);
-            $demand->setExcluded(array_map(fn($item) => (int)$item, $excluded));
+            $demand->setExcluded(GeneralUtility::intExplode(',', (string)($settings['exclude'] ?? ''), true));
         }
         if (!$demand->hasLimit()) {
-            $demand->setLimit($this->settings['limit'] ?? 0);
+            $demand->setLimit((int)($settings['limit'] ?? 0));
         }
         if (!$demand->hasItemsPerPage()) {
-            $demand->setItemsPerPage($this->settings['itemsPerPage'] ?? 0);
+            $demand->setItemsPerPage((int)($settings['itemsPerPage'] ?? 0));
         }
         if (!$demand->hasOffset()) {
-            $demand->setOffset($this->settings['offset'] ?? 0);
+            $demand->setOffset((int)($settings['offset'] ?? 0));
         }
-        if (!$demand->isArchivedSet() && $this->settings['archived'] === 'archived') {
+
+        $archived = (string)($settings['archived'] ?? '');
+        if (!$demand->isArchivedSet() && $archived === 'archived') {
             $demand->setArchived(true);
         }
-        if (!$demand->isNonArchivedSet() && $this->settings['archived'] === 'nonArchived') {
+        if (!$demand->isNonArchivedSet() && $archived === 'nonArchived') {
             $demand->setNonArchived(true);
         }
-        if (!$demand->isTopPostSet() && $this->settings['topPosts'] === 'topPosts') {
+
+        $topPosts = (string)($settings['topPosts'] ?? '');
+        if (!$demand->isTopPostSet() && $topPosts === 'topPosts') {
             $demand->setTopPost(true);
         }
-        if (!$demand->isNonTopPostSet() && $this->settings['topPosts'] === 'nonTopPosts') {
+        if (!$demand->isNonTopPostSet() && $topPosts === 'nonTopPosts') {
             $demand->setNonTopPost(true);
         }
-        if (!$demand->hasOrder() && $this->settings['sorting']) {
-            $demand->setOrder($this->settings['sorting']);
+
+        $sorting = (string)($settings['sorting'] ?? '');
+        if (!$demand->hasOrder() && $sorting !== '') {
+            $demand->setOrder($sorting);
         }
-        if (!$demand->hasOrderDirection() && $this->settings['sortingDirection']) {
-            $demand->setOrderDirection($this->settings['sortingDirection']);
+        $sortingDirection = (string)($settings['sortingDirection'] ?? '');
+        if (!$demand->hasOrderDirection() && $sortingDirection !== '') {
+            $demand->setOrderDirection($sortingDirection);
         }
 
         return $demand;

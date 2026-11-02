@@ -15,6 +15,7 @@ namespace Greenfieldr\Golb\Updates;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Install\Attribute\UpgradeWizard;
+use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 #[UpgradeWizard('relatedPostsMigration')]
@@ -31,11 +32,13 @@ final readonly class RelatedPostsMigration implements UpgradeWizardInterface
     }
     public function getDescription(): string
     {
-        return 'The relational field in pages table had a wrong data type due to historical reasons. Lets migrate it.';
+        return 'The field "tx_golb_related" in table "pages" had a wrong data type for historical reasons. Sets NULL values to 0.';
     }
     public function getPrerequisites(): array
     {
-        return [];
+        return [
+            DatabaseUpdatedPrerequisite::class,
+        ];
     }
     public function updateNecessary(): bool
     {

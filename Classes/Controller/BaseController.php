@@ -15,21 +15,23 @@ namespace Greenfieldr\Golb\Controller;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-/**
- * Class BaseController
- */
-class BaseController extends ActionController
+abstract class BaseController extends ActionController
 {
-    /**
-     * @var ContentObjectRenderer
-     */
-    protected $contentObject;
+    protected ?ContentObjectRenderer $contentObject = null;
 
-    /**
-     * Initialize action sets content object
-     */
     public function initializeAction(): void
     {
-        $this->contentObject = $this->request->getAttribute('currentContentObject');
+        $contentObject = $this->request->getAttribute('currentContentObject');
+        $this->contentObject = $contentObject instanceof ContentObjectRenderer ? $contentObject : null;
+    }
+
+    /**
+     * Returns the record (tt_content row) of the currently rendered plugin.
+     *
+     * @return array<string, mixed>
+     */
+    protected function getContentObjectData(): array
+    {
+        return $this->contentObject->data ?? [];
     }
 }
