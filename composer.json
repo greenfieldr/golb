@@ -35,6 +35,7 @@
 		"phpstan/phpstan-deprecation-rules": "^2.0",
 		"phpstan/phpstan-phpunit": "^2.0",
 		"phpstan/phpstan-strict-rules": "^2.0",
+		"phpunit/phpcov": "^10.0 || ^11.0",
 		"saschaegerer/phpstan-typo3": "^3.1",
 		"spaze/phpstan-disallowed-calls": "^4.0",
 		"ssch/typo3-rector": "^3.16",
@@ -81,6 +82,14 @@
 		"ci:composer": [
 			"@composer validate --strict"
 		],
+		"ci:coverage": [
+			"@ci:coverage:unit",
+			"@ci:coverage:functional",
+			"@ci:coverage:merge"
+		],
+		"ci:coverage:functional": "phpunit --configuration Build/phpunit/FunctionalTests.xml --coverage-php .Build/coverage/functional.cov",
+		"ci:coverage:merge": "phpcov merge --clover .Build/coverage/clover.xml --text php://stdout .Build/coverage",
+		"ci:coverage:unit": "phpunit --configuration Build/phpunit/UnitTests.xml --coverage-php .Build/coverage/unit.cov",
 		"ci:fractor": "fractor process --dry-run --config Build/fractor/fractor.php",
 		"ci:php": [
 			"@ci:php:cs",

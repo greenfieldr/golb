@@ -1,6 +1,7 @@
 # Golb - Blog The Page Way
 
 [![CI](https://github.com/greenfieldr/golb/actions/workflows/ci.yml/badge.svg)](https://github.com/greenfieldr/golb/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/greenfieldr/golb/badge.svg?branch=main)](https://coveralls.io/github/greenfieldr/golb?branch=main)
 [![Latest release](https://img.shields.io/github/v/release/greenfieldr/golb)](https://github.com/greenfieldr/golb/releases)
 [![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
 

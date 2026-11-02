@@ -104,8 +104,9 @@ Clone the repository and install the development dependencies:
 ..  code-block:: bash
 
     composer install
-    composer ci          # coding standards, PHPStan, Rector, Fractor, tests
-    composer fix         # apply Rector, Fractor and coding standard fixes
+    composer ci            # coding standards, PHPStan, Rector, Fractor, tests
+    composer fix           # apply Rector, Fractor and coding standard fixes
+    composer ci:coverage   # test suites with code coverage (PCOV or Xdebug)
 
 The functional tests run against SQLite by default
 (``typo3DatabaseDriver=pdo_sqlite``). The documentation can be rendered
