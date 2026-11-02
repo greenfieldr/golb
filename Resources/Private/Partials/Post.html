@@ -1,0 +1,31 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<article class="golb-post">
+    <h3 class="golb-post__title">
+        <f:link.page pageUid="{post.uid}">{post.title}</f:link.page>
+    </h3>
+    <p class="golb-post__meta">
+        <f:translate key="post.publishedOn"/>
+        <time datetime="{f:format.date(date: '@{post.effectiveDate}', format: 'Y-m-d')}">
+            <f:format.date format="{settings.dateFormat}">@{post.effectiveDate}</f:format.date>
+        </time>
+        <f:if condition="{post.author}">
+            <f:translate key="post.by"/> {post.author}
+        </f:if>
+    </p>
+    <f:if condition="{post.abstract}">
+        <p class="golb-post__abstract">{post.abstract}</p>
+    </f:if>
+    <f:if condition="{post.categories}">
+        <p class="golb-post__categories">
+            <f:translate key="post.categories"/>:
+            <f:for each="{post.categories}" as="category" iteration="iterator">{category.title}{f:if(condition: '!{iterator.isLast}', then: ', ')}</f:for>
+        </p>
+    </f:if>
+    <f:if condition="{post.tags}">
+        <p class="golb-post__tags">
+            <f:translate key="post.tags"/>:
+            <f:for each="{post.tags}" as="tag" iteration="iterator">{tag.title}{f:if(condition: '!{iterator.isLast}', then: ', ')}</f:for>
+        </p>
+    </f:if>
+</article>
+</html>

@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <xliff version="1.0">
-    <file source-language="en" datatype="plaintext" original="messages" date="2015-02-10T10:50:35Z" product-name="golb">
+    <file source-language="en" datatype="plaintext" original="messages" date="2025-11-02T12:00:00Z" product-name="golb">
         <header/>
         <body>
-            <trans-unit id="tx_golb_domain_model_page">
-                <source>Page</source>
+            <trans-unit id="list.empty">
+                <source>No blog posts found.</source>
             </trans-unit>
-            <trans-unit id="plugin.blogposts">
-                <source>Blogposts</source>
+            <trans-unit id="post.publishedOn">
+                <source>Published on</source>
+            </trans-unit>
+            <trans-unit id="post.by">
+                <source>by</source>
+            </trans-unit>
+            <trans-unit id="post.categories">
+                <source>Categories</source>
+            </trans-unit>
+            <trans-unit id="post.tags">
+                <source>Tags</source>
+            </trans-unit>
+            <trans-unit id="pagination.label">
+                <source>Pagination</source>
+            </trans-unit>
+            <trans-unit id="pagination.first">
+                <source>First</source>
+            </trans-unit>
+            <trans-unit id="pagination.previous">
+                <source>Previous</source>
+            </trans-unit>
+            <trans-unit id="pagination.next">
+                <source>Next</source>
+            </trans-unit>
+            <trans-unit id="pagination.last">
+                <source>Last</source>
             </trans-unit>
         </body>
     </file>

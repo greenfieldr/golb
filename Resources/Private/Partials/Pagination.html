@@ -1,114 +1,58 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en"
-      xmlns:f="http://xsd.helmut-hummel.de/ns/TYPO3/Fluid/ViewHelpers"
-      data-namespace-typo3-fluid="true">
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:comment>
+    Renders the pagination of the list view.
+
+    Variables: paginator (ArrayPaginator), pagination (SimplePagination),
+    demand (PostsDemand). Page links carry the "demand[currentPage]" plugin
+    argument; other demand arguments of the current request are not kept.
+</f:comment>
 <f:if condition="{paginator.numberOfPages} > 1">
-    <ul class="f3-widget-paginator">
-        <f:comment><!-- First --></f:comment>
-        <f:if condition="{f:translate(key:'pagination_first')}">
-            <f:if condition="{demand.currentPage} == {pagination.firstPageNumber}">
-                <f:then>
-                    <li class="first">
-                        <span><f:translate key="pagination_first"/></span>
-                    </li>
-                </f:then>
-                <f:else>
-                    <li class="first">
-                        <f:link.action>
-                            <f:translate key="pagination_first"/>
-                        </f:link.action>
-                    </li>
-                </f:else>
-            </f:if>
-        </f:if>
-
-        <f:comment><!-- Previous --></f:comment>
-        <f:if condition="{f:translate(key:'pagination_previous')}">
+    <nav class="golb-pagination" aria-label="{f:translate(key: 'pagination.label')}">
+        <ul class="golb-pagination__list">
             <f:if condition="{pagination.previousPageNumber}">
-                <f:then>
-                    <li class="previous">
-                        <f:if condition="{pagination.previousPageNumber} == {pagination.firstPageNumber}">
-                            <f:then>
-                                <f:link.action>
-                                    <f:translate key="pagination_previous"/>
-                                </f:link.action>
-                            </f:then>
-                            <f:else>
-                                <f:render section="BuildLink"
-                                          arguments="{pageNumber:pagination.previousPageNumber,linkText:'{f:translate(key:\'pagination_previous\')}'}" />
-                            </f:else>
-                        </f:if>
-                    </li>
-                </f:then>
-                <f:else>
-                    <li class="previous">
-                        <span><f:translate key="pagination_previous"/></span>
-                    </li>
-                </f:else>
-            </f:if>
-        </f:if>
-
-        <f:comment><!-- Numbered pages --></f:comment>
-        <f:for each="{pagination.allPageNumbers}" as="pageNumber">
-            <f:if condition="{pageNumber} == {demand.currentPage}">
-                <f:then>
-                    <li class="current">
-                        <span>{pageNumber}</span>
-                    </li>
-                </f:then>
-                <f:else>
-                    <li>
-                        <f:if condition="{pageNumber} > 1">
-                            <f:then>
-                                <f:render section="BuildLink"
-                                          arguments="{pageNumber:pageNumber}" />
-                            </f:then>
-                            <f:else>
-                                <f:link.action>
-                                    {pageNumber}
-                                </f:link.action>
-                            </f:else>
-                        </f:if>
-                    </li>
-                </f:else>
-            </f:if>
-        </f:for>
-
-        <f:comment><!-- Next --></f:comment>
-        <f:if condition="{f:translate(key:'pagination_next')}">
-            <f:if condition="{pagination.nextPageNumber}">
-                <li class="next">
-                    <f:render section="BuildLink"
-                              arguments="{pageNumber:pagination.nextPageNumber,linkText:'{f:translate(key:\'pagination_next\')}'}}" />
+                <li class="golb-pagination__item golb-pagination__item--first">
+                    <f:render section="PageLink" arguments="{pageNumber: pagination.firstPageNumber, label: '{f:translate(key: \'pagination.first\')}', rel: ''}"/>
+                </li>
+                <li class="golb-pagination__item golb-pagination__item--previous">
+                    <f:render section="PageLink" arguments="{pageNumber: pagination.previousPageNumber, label: '{f:translate(key: \'pagination.previous\')}', rel: 'prev'}"/>
                 </li>
             </f:if>
-        </f:if>
 
-        <f:comment><!-- Last --></f:comment>
-        <f:if condition="{f:translate(key:'pagination_last')}">
-            <f:if condition="{demand.currentPage} == {pagination.lastPageNumber}">
-                <f:then>
-                    <li class="last">
-                        <span><f:translate key="pagination_last"/></span>
-                    </li>
-                </f:then>
-                <f:else>
-                    <li class="last">
-                        <f:link.action additionalParams="{demand:{currentPage:pagination.lastPageNumber}}">
-                            <f:translate key="pagination_last"/>
-                        </f:link.action>
-                    </li>
-                </f:else>
+            <f:for each="{pagination.allPageNumbers}" as="pageNumber">
+                <f:if condition="{pageNumber} == {paginator.currentPageNumber}">
+                    <f:then>
+                        <li class="golb-pagination__item golb-pagination__item--current" aria-current="page">
+                            <span>{pageNumber}</span>
+                        </li>
+                    </f:then>
+                    <f:else>
+                        <li class="golb-pagination__item">
+                            <f:render section="PageLink" arguments="{pageNumber: pageNumber, label: pageNumber, rel: ''}"/>
+                        </li>
+                    </f:else>
+                </f:if>
+            </f:for>
+
+            <f:if condition="{pagination.nextPageNumber}">
+                <li class="golb-pagination__item golb-pagination__item--next">
+                    <f:render section="PageLink" arguments="{pageNumber: pagination.nextPageNumber, label: '{f:translate(key: \'pagination.next\')}', rel: 'next'}"/>
+                </li>
+                <li class="golb-pagination__item golb-pagination__item--last">
+                    <f:render section="PageLink" arguments="{pageNumber: pagination.lastPageNumber, label: '{f:translate(key: \'pagination.last\')}', rel: ''}"/>
+                </li>
             </f:if>
-        </f:if>
-    </ul>
+        </ul>
+    </nav>
 </f:if>
 
-<f:section name="BuildLink">
-    <f:link.action additionalParams="{tx_golb_listview: {demand: {currentPage: pageNumber}}}">
-        <f:if condition="{linkText}">
-            <f:then>{linkText}</f:then>
-            <f:else>{pageNumber}</f:else>
-        </f:if>
-    </f:link.action>
+<f:section name="PageLink">
+    <f:if condition="{pageNumber} > 1">
+        <f:then>
+            <f:link.action arguments="{demand: {currentPage: pageNumber}}" rel="{rel}">{label}</f:link.action>
+        </f:then>
+        <f:else>
+            <f:link.action rel="{rel}">{label}</f:link.action>
+        </f:else>
+    </f:if>
 </f:section>
 </html>
