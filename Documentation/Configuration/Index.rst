@@ -43,7 +43,7 @@ can be changed for both plugins at once or for a single plugin.
     :default: ``1``
 
     Whether the default layout adds the stylesheets of
-    :ref:`settings.css <typoscript-css>` to the page. Disable it to style
+    ``settings.css`` to the page. Disable it to style
     the markup yourself.
 
 ..  confval:: plugin.tx_golb.settings.dateFormat
@@ -59,7 +59,7 @@ can be changed for both plugins at once or for a single plugin.
     :type: array
 
     Stylesheets the default layout adds to the page while
-    :ref:`includeCss <typoscript-includeCss>` is enabled, by default
+    ``includeCss`` is enabled, by default
     ``golb = EXT:golb/Resources/Public/Css/golb.css``. Remove or add
     entries to replace or extend the default styles, see
     :ref:`templating-css`.
