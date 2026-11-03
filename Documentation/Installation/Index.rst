@@ -54,6 +54,12 @@ Setup
     :guilabel:`Golb > Latest view` to a page and select the blog root
     page(s) in the :guilabel:`Pages` field. See :ref:`editor-plugins`.
 
+#.  **Frontend:** The plugins come styled: the default templates add a
+    plain stylesheet to the page. Disable it with the constant
+    :typoscript:`plugin.tx_golb.settings.includeCss = 0` if you want to
+    style the markup yourself, and insert :typoscript:`lib.golb.post` in
+    the page template to render post pages, see :ref:`templating`.
+
 #.  **Optional:** Decide where tags are stored. Tag records can be created
     in any page or folder; a dedicated "Tags" folder below the blog root
     is a common choice.
