@@ -2,3 +2,18 @@ config.no_cache = 1
 
 page = PAGE
 page.10 < styles.content.get
+
+# Tests override plugin settings with the request parameter "golbSettings",
+# e.g. ?golbSettings=show.flags=0 (one "path=value" pair)
+[request.getQueryParams()['golbSettings'] ?? '' == 'show.flags=0']
+    plugin.tx_golb_listview.settings.show.flags = 0
+    plugin.tx_golb_latestview.settings.show.flags = 0
+[END]
+[request.getQueryParams()['golbSettings'] ?? '' == 'includeCss=0']
+    plugin.tx_golb_listview.settings.includeCss = 0
+    plugin.tx_golb_latestview.settings.includeCss = 0
+[END]
+[request.getQueryParams()['golbSettings'] ?? '' == 'filterLinks.enabled=1']
+    plugin.tx_golb_listview.settings.filterLinks.enabled = 1
+    plugin.tx_golb_latestview.settings.filterLinks.enabled = 1
+[END]

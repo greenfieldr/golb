@@ -1,0 +1,16 @@
+config.no_cache = 1
+
+page = PAGE
+page.10 = FLUIDTEMPLATE
+page.10 {
+    template = TEXT
+    template.value (
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+[blogPost:{blogPost.title}:{blogPost.doktype}]
+<f:cObject typoscriptObjectPath="lib.golb.post" data="{data}"/>
+</html>
+    )
+    dataProcessing {
+        10 = Greenfieldr\Golb\DataProcessing\MetaInformationProcessor
+    }
+}
