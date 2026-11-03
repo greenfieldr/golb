@@ -1,4 +1,15 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:comment>
+    Wraps every plugin output and the detail rendering in <div class="golb">
+    and adds the default stylesheets (settings.css) to the page unless
+    settings.includeCss is disabled. The identifier makes sure every file
+    is added once, no matter how many plugins render on a page.
+</f:comment>
+<f:if condition="{settings.includeCss}">
+    <f:for each="{settings.css}" key="identifier" as="file">
+        <f:asset.css identifier="golb-{identifier}" href="{file}"/>
+    </f:for>
+</f:if>
 <div class="golb">
     <f:render section="Main"/>
 </div>

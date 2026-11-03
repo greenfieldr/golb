@@ -7,4 +7,51 @@ plugin.tx_golb {
         # cat=plugin.tx_golb/file; type=string; label=Path to layout files
         layoutRootPath = EXT:golb/Resources/Private/Layouts/
     }
+
+    settings {
+        # cat=plugin.tx_golb/enable/100; type=boolean; label=Include the default CSS: Adds the plain stylesheet of the default templates (EXT:golb/Resources/Public/Css/golb.css) to the page. Disable it to style the markup yourself.
+        includeCss = 1
+        # cat=plugin.tx_golb/a/100; type=string; label=Date format: Format of the publish date in the default templates (f:format.date)
+        dateFormat = %d.%m.%Y
+
+        show {
+            # cat=plugin.tx_golb/enable/200; type=boolean; label=Show image: The first file of the page field "Media" as teaser and detail image
+            image = 1
+            # cat=plugin.tx_golb/enable/210; type=boolean; label=Show author image
+            authorImage = 1
+            # cat=plugin.tx_golb/enable/220; type=boolean; label=Show abstract
+            abstract = 1
+            # cat=plugin.tx_golb/enable/230; type=boolean; label=Show categories
+            categories = 1
+            # cat=plugin.tx_golb/enable/240; type=boolean; label=Show tags
+            tags = 1
+            # cat=plugin.tx_golb/enable/250; type=boolean; label=Show flags: "Top post" and "Archived" badges
+            flags = 1
+            # cat=plugin.tx_golb/enable/260; type=boolean; label=Show related posts: Below the detail rendering (lib.golb.post)
+            related = 1
+        }
+
+        imageWidth {
+            # cat=plugin.tx_golb/dims/100; type=int+; label=Teaser image width: Width of the image in the lists, in pixels
+            teaser = 640
+            # cat=plugin.tx_golb/dims/110; type=int+; label=Detail image width: Width of the image in the detail rendering, in pixels
+            detail = 1280
+            # cat=plugin.tx_golb/dims/120; type=int+; label=Author image size: Width and height of the author image, in pixels
+            author = 48
+        }
+
+        filterLinks {
+            # cat=plugin.tx_golb/enable/300; type=boolean; label=Link categories and tags: Links every category and tag to the List view plugin, filtered by that term. The List view plugin has to allow demand overwrites.
+            enabled = 0
+            # cat=plugin.tx_golb/links/100; type=int+; label=List page: Page with the List view plugin the category and tag links point to (0 = the current page)
+            pageUid = 0
+        }
+
+        related {
+            # cat=plugin.tx_golb/a/200; type=int+; label=Number of related posts: Posts sharing tags with the current post in the detail rendering
+            limit = 3
+            # cat=plugin.tx_golb/a/210; type=string; label=Root pages of related posts: Comma separated page uids the related posts are collected from (empty = the parent page of the current post)
+            pages =
+        }
+    }
 }

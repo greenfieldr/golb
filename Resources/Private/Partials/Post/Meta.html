@@ -1,0 +1,20 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:comment>
+    Renders the publish date and the author (with image) of a post.
+
+    Variables: post (Page), settings (plugin settings with dateFormat,
+    show.authorImage and imageWidth.author).
+</f:comment>
+<div class="golb-post__meta">
+    <f:if condition="{settings.show.authorImage} && {post.authorImage}">
+        <f:image image="{post.authorImage}" width="{settings.imageWidth.author}c" height="{settings.imageWidth.author}c" alt="{post.author}" class="golb-post__author-image" loading="lazy"/>
+    </f:if>
+    <span class="golb-post__published">
+        <f:translate key="post.publishedOn" extensionName="Golb"/>
+        <time datetime="{f:format.date(date: '@{post.effectiveDate}', format: 'Y-m-d')}"><f:format.date format="{settings.dateFormat}">@{post.effectiveDate}</f:format.date></time>
+    </span>
+    <f:if condition="{post.author}">
+        <span class="golb-post__author"><f:translate key="post.by" extensionName="Golb"/> {post.author}</span>
+    </f:if>
+</div>
+</html>

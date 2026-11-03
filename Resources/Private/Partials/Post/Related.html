@@ -1,0 +1,53 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:golb="http://typo3.org/ns/Greenfieldr/Golb/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+<f:comment>
+    Renders the related posts of a post as teasers: the hand-picked related
+    posts of the page record if there are any, otherwise the posts sharing
+    the most tags (settings.related.limit) below settings.related.pages
+    (comma separated root page uids, default: the parent page of the post).
+
+    Variables: post (Page), settings (plugin settings).
+</f:comment>
+<f:if condition="{post.relatedPages}">
+    <f:then>
+        <f:render section="Related" arguments="{post: post, posts: post.relatedPages, settings: settings}"/>
+    </f:then>
+    <f:else>
+        <f:if condition="{settings.related.pages}">
+            <f:then>
+                <f:variable name="rootPages" value="{settings.related.pages -> f:split(separator: ',')}"/>
+            </f:then>
+            <f:else>
+                <f:variable name="rootPages" value="{0: post.pid}"/>
+            </f:else>
+        </f:if>
+        <golb:relatedPosts posts="{rootPages}" currentPost="{post}" limit="{settings.related.limit}" as="relatedPosts">
+            <f:if condition="{relatedPosts}">
+                <f:render section="Related" arguments="{post: post, posts: relatedPosts, settings: settings}"/>
+            </f:if>
+        </golb:relatedPosts>
+    </f:else>
+</f:if>
+
+<f:comment>
+    Section "Related": posts is either the object storage of hand-picked
+    pages or the result of the ViewHelper, an array of {post, amount}.
+</f:comment>
+<f:section name="Related">
+    <aside class="golb-related" aria-labelledby="golb-related-{post.uid}">
+        <h2 class="golb-related__title" id="golb-related-{post.uid}"><f:translate key="related.title" extensionName="Golb"/></h2>
+        <ul class="golb-list golb-list--related">
+            <f:for each="{posts}" as="item">
+                <f:variable name="relatedPost" value="{item.post}"/>
+                <f:if condition="!{relatedPost}">
+                    <f:variable name="relatedPost" value="{item}"/>
+                </f:if>
+                <li class="golb-list__item">
+                    <f:render partial="Post" arguments="{post: relatedPost, settings: settings}"/>
+                </li>
+            </f:for>
+        </ul>
+    </aside>
+</f:section>
+</html>

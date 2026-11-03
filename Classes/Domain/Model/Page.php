@@ -502,6 +502,19 @@ class Page extends AbstractEntity
         $this->media = $media;
     }
 
+    /**
+     * Returns the first file of the "Media" field, e.g. as teaser image, or
+     * null if there is none.
+     */
+    public function getFirstMedia(): ?FileReference
+    {
+        foreach ($this->media as $file) {
+            return $file;
+        }
+
+        return null;
+    }
+
     public function getMountPid(): ?int
     {
         return $this->mountPid;

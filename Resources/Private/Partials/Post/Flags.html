@@ -1,0 +1,17 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:comment>
+    Renders the "Top post" and "Archived" flags of a post as badges.
+
+    Variables: post (Page), settings (plugin settings).
+</f:comment>
+<f:if condition="{settings.show.flags} && ({post.topPost} || {post.archived})">
+    <p class="golb-post__flags">
+        <f:if condition="{post.topPost}">
+            <span class="golb-flag golb-flag--top"><f:translate key="post.topPost" extensionName="Golb"/></span>
+        </f:if>
+        <f:if condition="{post.archived}">
+            <span class="golb-flag golb-flag--archived"><f:translate key="post.archived" extensionName="Golb"/></span>
+        </f:if>
+    </p>
+</f:if>
+</html>

@@ -22,7 +22,7 @@
                 <f:if condition="{pageNumber} == {paginator.currentPageNumber}">
                     <f:then>
                         <li class="golb-pagination__item golb-pagination__item--current" aria-current="page">
-                            <span>{pageNumber}</span>
+                            <span class="golb-pagination__link golb-pagination__link--current">{pageNumber}</span>
                         </li>
                     </f:then>
                     <f:else>
@@ -48,10 +48,10 @@
 <f:section name="PageLink">
     <f:if condition="{pageNumber} > 1">
         <f:then>
-            <f:link.action arguments="{demand: {currentPage: pageNumber}}" rel="{rel}">{label}</f:link.action>
+            <f:link.action arguments="{demand: {currentPage: pageNumber}}" rel="{rel}" class="golb-pagination__link">{label}</f:link.action>
         </f:then>
         <f:else>
-            <f:link.action rel="{rel}">{label}</f:link.action>
+            <f:link.action rel="{rel}" class="golb-pagination__link">{label}</f:link.action>
         </f:else>
     </f:if>
 </f:section>

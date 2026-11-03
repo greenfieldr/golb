@@ -7,7 +7,7 @@
             <ul class="golb-list golb-list--latest">
                 <f:for each="{posts}" as="post">
                     <li class="golb-list__item">
-                        <f:render partial="Post" arguments="{post: post, settings: settings}"/>
+                        <f:render partial="Post" arguments="{post: post, settings: settings, contentElementData: contentElementData}"/>
                     </li>
                 </f:for>
             </ul>

@@ -65,8 +65,9 @@ final class RelatedPostsViewHelper extends AbstractViewHelper
             }
         }
 
+        // Settings from TypoScript arrive as numeric strings
         $limit = $this->arguments['limit'];
-        $limit = is_int($limit) ? $limit : 3;
+        $limit = is_numeric($limit) ? (int)$limit : 3;
 
         $as = $this->arguments['as'];
         $as = is_string($as) && $as !== '' ? $as : 'relatedPosts';
