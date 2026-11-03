@@ -2,12 +2,18 @@
 <f:layout name="Default"/>
 
 <f:section name="Main">
+    <f:if condition="{demand.tag} || {demand.tags} || {demand.category}">
+        <p class="golb-filter">
+            <span class="golb-filter__label"><f:translate key="list.filtered"/></span>
+            <f:link.action class="golb-filter__reset"><f:translate key="list.showAll"/></f:link.action>
+        </p>
+    </f:if>
     <f:if condition="{paginator.paginatedItems}">
         <f:then>
             <ul class="golb-list golb-list--list">
                 <f:for each="{paginator.paginatedItems}" as="post">
                     <li class="golb-list__item">
-                        <f:render partial="Post" arguments="{post: post, settings: settings}"/>
+                        <f:render partial="Post" arguments="{post: post, settings: settings, contentElementData: contentElementData}"/>
                     </li>
                 </f:for>
             </ul>

@@ -1,0 +1,48 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:comment>
+    Renders the categories and tags of a post. With settings.filterLinks
+    enabled every term links to the list plugin (settings.filterLinks.pageUid,
+    default: the current page) and filters it with the demand argument of
+    the plugin namespace settings.filterLinks.namespace; the list plugin
+    has to allow demand overwrites for that.
+
+    Variables: post (Page), settings (plugin settings), contentElementData
+    (plugin record, optional) or data (page record of a FLUIDTEMPLATE,
+    optional) for the current page uid.
+</f:comment>
+<f:variable name="filterPageUid" value="{settings.filterLinks.pageUid}"/>
+<f:if condition="!{filterPageUid}">
+    <f:variable name="filterPageUid" value="{contentElementData.pid}"/>
+</f:if>
+<f:if condition="!{filterPageUid}">
+    <f:variable name="filterPageUid" value="{data.uid}"/>
+</f:if>
+
+<f:if condition="{settings.show.categories} && {post.categories}">
+    <p class="golb-terms golb-terms--categories">
+        <span class="golb-terms__label"><f:translate key="post.categories" extensionName="Golb"/>:</span>
+        <f:for each="{post.categories}" as="category">
+            <f:render section="Term" arguments="{title: category.title, parameter: 'category', uid: category.uid, filterPageUid: filterPageUid, settings: settings}"/>
+        </f:for>
+    </p>
+</f:if>
+<f:if condition="{settings.show.tags} && {post.tags}">
+    <p class="golb-terms golb-terms--tags">
+        <span class="golb-terms__label"><f:translate key="post.tags" extensionName="Golb"/>:</span>
+        <f:for each="{post.tags}" as="tag">
+            <f:render section="Term" arguments="{title: tag.title, parameter: 'tag', uid: tag.uid, filterPageUid: filterPageUid, settings: settings}"/>
+        </f:for>
+    </p>
+</f:if>
+
+<f:section name="Term">
+    <f:if condition="{settings.filterLinks.enabled} && {filterPageUid}">
+        <f:then>
+            <f:link.typolink parameter="{filterPageUid}" additionalParams="&{settings.filterLinks.namespace}[demand][{parameter}]={uid}" class="golb-term golb-term--link">{title}</f:link.typolink>
+        </f:then>
+        <f:else>
+            <span class="golb-term">{title}</span>
+        </f:else>
+    </f:if>
+</f:section>
+</html>

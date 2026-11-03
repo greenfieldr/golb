@@ -14,6 +14,16 @@ for TYPO3 14). The file is regenerated with git-cliff on every release.
 
 - Default templates with a shared post partial, translatable labels and
   a pagination that uses plugin arguments
+- **frontend:** Complete default frontend: teasers with image, flags,
+  author image, categories and tags as optional filter links, a card grid
+  for the latest view, a plain stylesheet (`Resources/Public/Css/golb.css`)
+  added by the layout and switchable with the constant `includeCss`, and
+  `show.*` constants to leave single elements out
+- **frontend:** Detail rendering of post pages with `lib.golb.post`
+  (article with content, related posts) and Open Graph / article meta tags
+  added by the `MetaInformationProcessor` option `metaTags`
+- **model:** `Page::getFirstMedia()` returns the first file of the
+  "Media" field
 
 ### Bug fixes
 

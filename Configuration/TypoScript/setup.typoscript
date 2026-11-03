@@ -17,11 +17,92 @@ plugin.tx_golb {
     }
 
     settings {
+        # The default layout adds the stylesheets listed in "css" to the page
+        # if includeCss is enabled. Remove an entry (settings.css.golb >) or
+        # add your own file to extend or replace the default styles.
+        includeCss = {$plugin.tx_golb.settings.includeCss}
+        css {
+            golb = EXT:golb/Resources/Public/Css/golb.css
+        }
+
         # Date format used by the default templates (see f:format.date)
-        dateFormat = %d.%m.%Y
+        dateFormat = {$plugin.tx_golb.settings.dateFormat}
+
+        # Elements of the default templates, 0 leaves them out
+        show {
+            image = {$plugin.tx_golb.settings.show.image}
+            authorImage = {$plugin.tx_golb.settings.show.authorImage}
+            abstract = {$plugin.tx_golb.settings.show.abstract}
+            categories = {$plugin.tx_golb.settings.show.categories}
+            tags = {$plugin.tx_golb.settings.show.tags}
+            flags = {$plugin.tx_golb.settings.show.flags}
+            related = {$plugin.tx_golb.settings.show.related}
+        }
+
+        # Image sizes in pixels (f:image width)
+        imageWidth {
+            teaser = {$plugin.tx_golb.settings.imageWidth.teaser}
+            detail = {$plugin.tx_golb.settings.imageWidth.detail}
+            author = {$plugin.tx_golb.settings.imageWidth.author}
+        }
+
+        # Links of categories and tags: they point to the List view plugin on
+        # pageUid (0 = current page) and filter it with the demand argument
+        # of the plugin namespace, e.g. tx_golb_listview[demand][tag]=3.
+        filterLinks {
+            enabled = {$plugin.tx_golb.settings.filterLinks.enabled}
+            pageUid = {$plugin.tx_golb.settings.filterLinks.pageUid}
+            namespace = tx_golb_listview
+        }
+
+        # Related posts in the detail rendering (lib.golb.post)
+        related {
+            limit = {$plugin.tx_golb.settings.related.limit}
+            pages = {$plugin.tx_golb.settings.related.pages}
+        }
     }
 }
 
 # Both plugins (golb_listview, golb_latestview) inherit from plugin.tx_golb
 plugin.tx_golb_listview < plugin.tx_golb
 plugin.tx_golb_latestview < plugin.tx_golb
+
+# Detail rendering of a blog post page: the complete article with header
+# (flags, title, subtitle, date and author), image, abstract, the page
+# content and footer (categories, tags), followed by the related posts.
+# The MetaInformationProcessor provides the post and adds the Open Graph
+# and article meta tags to the page. Use it in the page template of the
+# site in place of the content:
+#
+#   <f:cObject typoscriptObjectPath="lib.golb.post" data="{data}"/>
+#
+# or with TypoScript for blog post pages only:
+#
+#   [page["doktype"] == 41]
+#   page.10.variables.content =< lib.golb.post
+#   [END]
+lib.golb.post = FLUIDTEMPLATE
+lib.golb.post {
+    templateName = Post
+    templateRootPaths {
+        0 = EXT:golb/Resources/Private/Templates/Page/
+        10 = {$plugin.tx_golb.view.templateRootPath}Page/
+    }
+    partialRootPaths < plugin.tx_golb.view.partialRootPaths
+    layoutRootPaths < plugin.tx_golb.view.layoutRootPaths
+
+    settings < plugin.tx_golb.settings
+
+    dataProcessing {
+        10 = Greenfieldr\Golb\DataProcessing\MetaInformationProcessor
+        10 {
+            as = post
+            metaTags = 1
+        }
+    }
+
+    variables {
+        # The content elements of the post (fluid_styled_content)
+        content =< styles.content.get
+    }
+}

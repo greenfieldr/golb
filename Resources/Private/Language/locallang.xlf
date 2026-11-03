@@ -18,6 +18,24 @@
             <trans-unit id="post.tags">
                 <source>Tags</source>
             </trans-unit>
+            <trans-unit id="list.filtered">
+                <source>Filtered list.</source>
+            </trans-unit>
+            <trans-unit id="list.showAll">
+                <source>Show all posts</source>
+            </trans-unit>
+            <trans-unit id="post.readMore">
+                <source>Read more</source>
+            </trans-unit>
+            <trans-unit id="post.topPost">
+                <source>Top post</source>
+            </trans-unit>
+            <trans-unit id="post.archived">
+                <source>Archived</source>
+            </trans-unit>
+            <trans-unit id="related.title">
+                <source>Related posts</source>
+            </trans-unit>
             <trans-unit id="pagination.label">
                 <source>Pagination</source>
             </trans-unit>

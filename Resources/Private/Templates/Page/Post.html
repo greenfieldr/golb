@@ -1,0 +1,55 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default"/>
+
+<f:comment>
+    Detail rendering of a blog post page, used by the TypoScript object
+    lib.golb.post: header with flags, title, subtitle and meta data, the
+    first media file, the abstract, the page content and the categories,
+    tags and related posts.
+
+    Variables: post (Page, provided by the MetaInformationProcessor),
+    content (rendered page content, see lib.golb.post.variables.content),
+    data (page record), settings (plugin.tx_golb.settings).
+</f:comment>
+<f:section name="Main">
+    <f:if condition="{post}">
+        <article class="golb-post golb-post--detail{f:if(condition: post.topPost, then: ' golb-post--top')}{f:if(condition: post.archived, then: ' golb-post--archived')}">
+            <header class="golb-post__header">
+                <f:render partial="Post/Flags" arguments="{post: post, settings: settings}"/>
+                <h1 class="golb-post__title">{post.title}</h1>
+                <f:if condition="{post.subtitle}">
+                    <p class="golb-post__subtitle">{post.subtitle}</p>
+                </f:if>
+                <f:render partial="Post/Meta" arguments="{post: post, settings: settings}"/>
+            </header>
+
+            <f:if condition="{settings.show.image} && {post.firstMedia}">
+                <figure class="golb-post__figure">
+                    <f:image image="{post.firstMedia}" width="{settings.imageWidth.detail}" class="golb-post__image"/>
+                    <f:if condition="{post.firstMedia.originalResource.description}">
+                        <figcaption class="golb-post__caption">{post.firstMedia.originalResource.description}</figcaption>
+                    </f:if>
+                </figure>
+            </f:if>
+
+            <f:if condition="{settings.show.abstract} && {post.abstract}">
+                <p class="golb-post__abstract golb-post__abstract--lead">{post.abstract}</p>
+            </f:if>
+
+            <div class="golb-post__content">
+                <f:format.raw>{content}</f:format.raw>
+            </div>
+
+            <f:if condition="({settings.show.categories} && {post.categories}) || ({settings.show.tags} && {post.tags})">
+                <footer class="golb-post__footer">
+                    <f:render partial="Post/Terms" arguments="{post: post, settings: settings, data: data}"/>
+                </footer>
+            </f:if>
+        </article>
+
+        <f:if condition="{settings.show.related}">
+            <f:render partial="Post/Related" arguments="{post: post, settings: settings}"/>
+        </f:if>
+    </f:if>
+</f:section>
+</html>

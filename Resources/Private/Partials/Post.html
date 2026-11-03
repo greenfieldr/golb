@@ -1,31 +1,30 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-<article class="golb-post">
-    <h3 class="golb-post__title">
-        <f:link.page pageUid="{post.uid}">{post.title}</f:link.page>
-    </h3>
-    <p class="golb-post__meta">
-        <f:translate key="post.publishedOn"/>
-        <time datetime="{f:format.date(date: '@{post.effectiveDate}', format: 'Y-m-d')}">
-            <f:format.date format="{settings.dateFormat}">@{post.effectiveDate}</f:format.date>
-        </time>
-        <f:if condition="{post.author}">
-            <f:translate key="post.by"/> {post.author}
+<f:comment>
+    Renders one post as teaser in a list: image, flags, title, meta data,
+    abstract, categories and tags.
+
+    Variables: post (Page), settings (plugin settings), contentElementData
+    (plugin record, optional, target of the filter links).
+</f:comment>
+<article class="golb-post golb-post--teaser{f:if(condition: post.topPost, then: ' golb-post--top')}{f:if(condition: post.archived, then: ' golb-post--archived')}">
+    <f:if condition="{settings.show.image} && {post.firstMedia}">
+        <f:link.page pageUid="{post.uid}" class="golb-post__image" tabindex="-1" aria-hidden="true">
+            <f:image image="{post.firstMedia}" width="{settings.imageWidth.teaser}" loading="lazy"/>
+        </f:link.page>
+    </f:if>
+    <div class="golb-post__body">
+        <f:render partial="Post/Flags" arguments="{post: post, settings: settings}"/>
+        <h3 class="golb-post__title">
+            <f:link.page pageUid="{post.uid}">{post.title}</f:link.page>
+        </h3>
+        <f:render partial="Post/Meta" arguments="{post: post, settings: settings}"/>
+        <f:if condition="{settings.show.abstract} && {post.abstract}">
+            <p class="golb-post__abstract">{post.abstract}</p>
         </f:if>
-    </p>
-    <f:if condition="{post.abstract}">
-        <p class="golb-post__abstract">{post.abstract}</p>
-    </f:if>
-    <f:if condition="{post.categories}">
-        <p class="golb-post__categories">
-            <f:translate key="post.categories"/>:
-            <f:for each="{post.categories}" as="category" iteration="iterator">{category.title}{f:if(condition: '!{iterator.isLast}', then: ', ')}</f:for>
+        <f:render partial="Post/Terms" arguments="{post: post, settings: settings, contentElementData: contentElementData}"/>
+        <p class="golb-post__more">
+            <f:link.page pageUid="{post.uid}" class="golb-post__more-link"><f:translate key="post.readMore" extensionName="Golb"/><span class="golb-visually-hidden">: {post.title}</span></f:link.page>
         </p>
-    </f:if>
-    <f:if condition="{post.tags}">
-        <p class="golb-post__tags">
-            <f:translate key="post.tags"/>:
-            <f:for each="{post.tags}" as="tag" iteration="iterator">{tag.title}{f:if(condition: '!{iterator.isLast}', then: ', ')}</f:for>
-        </p>
-    </f:if>
+    </div>
 </article>
 </html>
