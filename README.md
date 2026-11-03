@@ -12,6 +12,13 @@ categories, tags, related posts, archived and top post flags) on the page
 record. Two plugins list the posts: a paginated *List view* and a limited
 *Latest view*.
 
+The frontend works out of the box: teasers with image, flags, date, author,
+abstract, categories and tags, a card grid for the latest posts, a detail
+rendering of the post page (`lib.golb.post`) with related posts and
+Open Graph / article meta tags, and a plain stylesheet without framework or
+brand colours that adapts to the site. Every piece can be switched off,
+overridden or replaced with your own templates and CSS.
+
 ## Compatibility
 
 | Golb  | TYPO3    | PHP       |

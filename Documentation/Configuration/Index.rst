@@ -37,13 +37,115 @@ can be changed for both plugins at once or for a single plugin.
 
     Layout paths, same mechanism as the template paths.
 
+..  confval:: plugin.tx_golb.settings.includeCss
+    :name: typoscript-includeCss
+    :type: boolean (constant)
+    :default: ``1``
+
+    Whether the default layout adds the stylesheets of
+    :ref:`settings.css <typoscript-css>` to the page. Disable it to style
+    the markup yourself.
+
 ..  confval:: plugin.tx_golb.settings.dateFormat
     :name: typoscript-dateFormat
-    :type: string
+    :type: string (constant)
     :default: ``%d.%m.%Y``
 
     Date format used by the default templates, see the
     :ref:`f:format.date <t3viewhelper:typo3-fluid-format-date>` ViewHelper.
+
+..  confval:: plugin.tx_golb.settings.css
+    :name: typoscript-css
+    :type: array
+
+    Stylesheets the default layout adds to the page while
+    :ref:`includeCss <typoscript-includeCss>` is enabled, by default
+    ``golb = EXT:golb/Resources/Public/Css/golb.css``. Remove or add
+    entries to replace or extend the default styles, see
+    :ref:`templating-css`.
+
+..  confval:: plugin.tx_golb.settings.filterLinks.namespace
+    :name: typoscript-filterLinks-namespace
+    :type: string
+    :default: ``tx_golb_listview``
+
+    Plugin namespace of the demand arguments the
+    :ref:`filter links <templating-filter-links>` carry.
+
+The object :typoscript:`lib.golb.post` renders the detail view of a post
+page, see :ref:`templating-detail`. It copies
+:typoscript:`plugin.tx_golb.settings`, so settings that should apply to
+the plugins and the detail rendering alike are best set as constants.
+
+..  _configuration-constants:
+
+Constants
+=========
+
+The following constants are available in the constant editor (category
+"plugin.tx_golb") and are used by the default templates:
+
+..  list-table::
+    :header-rows: 1
+
+    *   -   Constant
+        -   Default
+        -   Description
+    *   -   ``settings.includeCss``
+        -   ``1``
+        -   Adds the default stylesheet to the page, see
+            :ref:`templating-css`
+    *   -   ``settings.dateFormat``
+        -   ``%d.%m.%Y``
+        -   Date format of the publish date, see the
+            :ref:`f:format.date <t3viewhelper:typo3-fluid-format-date>`
+            ViewHelper
+    *   -   ``settings.show.image``
+        -   ``1``
+        -   The first file of the page field "Media" as teaser and
+            detail image
+    *   -   ``settings.show.authorImage``
+        -   ``1``
+        -   The author image next to the author name
+    *   -   ``settings.show.abstract``
+        -   ``1``
+        -   The abstract of the post
+    *   -   ``settings.show.categories``
+        -   ``1``
+        -   The categories of the post
+    *   -   ``settings.show.tags``
+        -   ``1``
+        -   The tags of the post
+    *   -   ``settings.show.flags``
+        -   ``1``
+        -   The "Top post" and "Archived" badges
+    *   -   ``settings.show.related``
+        -   ``1``
+        -   The related posts below the detail rendering
+    *   -   ``settings.imageWidth.teaser``
+        -   ``640``
+        -   Width of the teaser image in pixels
+    *   -   ``settings.imageWidth.detail``
+        -   ``1280``
+        -   Width of the image in the detail rendering in pixels
+    *   -   ``settings.imageWidth.author``
+        -   ``48``
+        -   Width and height of the author image in pixels
+    *   -   ``settings.filterLinks.enabled``
+        -   ``0``
+        -   Link categories and tags to the filtered List view, see
+            :ref:`templating-filter-links`
+    *   -   ``settings.filterLinks.pageUid``
+        -   ``0``
+        -   Page with the List view plugin the filter links point to,
+            ``0`` for the current page
+    *   -   ``settings.related.limit``
+        -   ``3``
+        -   Number of related posts found by shared tags
+    *   -   ``settings.related.pages``
+        -   empty
+        -   Comma separated root page uids the related posts are collected
+            from, empty for the parent page of the post
 
 The TypoScript constants :typoscript:`plugin.tx_golb.view.templateRootPath`,
 :typoscript:`partialRootPath` and :typoscript:`layoutRootPath` are
