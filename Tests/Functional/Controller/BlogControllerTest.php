@@ -67,7 +67,7 @@ final class BlogControllerTest extends FunctionalTestCase
      * @param array<string, string|int> $settings FlexForm settings
      * @param int[] $categories uids of categories selected in the plugin
      */
-    private function createPlugin(string $cType, string $pages, array $settings = [], array $categories = []): void
+    private function createPlugin(string $cType, string $pages, array $settings = [], array $categories = [], int $uid = 100): void
     {
         $fields = '';
         foreach ($settings as $name => $value) {
@@ -83,10 +83,10 @@ final class BlogControllerTest extends FunctionalTestCase
 
         $connectionPool = $this->get(ConnectionPool::class);
         $connectionPool->getConnectionForTable('tt_content')->insert('tt_content', [
-            'uid' => 100,
+            'uid' => $uid,
             'pid' => 1,
             'colPos' => 0,
-            'sorting' => 1,
+            'sorting' => $uid,
             'CType' => $cType,
             'header' => 'Plugin',
             'pages' => $pages,
@@ -96,7 +96,7 @@ final class BlogControllerTest extends FunctionalTestCase
         foreach ($categories as $sorting => $categoryUid) {
             $connectionPool->getConnectionForTable('sys_category_record_mm')->insert('sys_category_record_mm', [
                 'uid_local' => $categoryUid,
-                'uid_foreign' => 100,
+                'uid_foreign' => $uid,
                 'tablenames' => 'tt_content',
                 'fieldname' => 'categories',
                 'sorting' => $sorting + 1,
@@ -106,7 +106,9 @@ final class BlogControllerTest extends FunctionalTestCase
     }
 
     /**
-     * @param array<string, int|string> $queryParameters flat parameter names, e.g. "tx_golb_listview[demand][tag]"
+     * @param array<string, int|string> $queryParameters flat parameter names, e.g. "tx_golb_listview[demand][tag]";
+     *                                                   "golbSettings" overrides plugin.tx_golb.settings for the
+     *                                                   request, see the Rendering.typoscript fixture
      */
     private function render(array $queryParameters = []): string
     {
@@ -130,7 +132,7 @@ final class BlogControllerTest extends FunctionalTestCase
         self::assertStringContainsString('Third post', $html);
         self::assertLessThan(strpos($html, 'Third post'), strpos($html, 'First post'));
         self::assertLessThan(strpos($html, 'Second post'), strpos($html, 'Third post'));
-        self::assertSame(3, substr_count($html, '<article class="golb-post">'));
+        self::assertSame(3, substr_count($html, '<article class="golb-post golb-post--teaser'));
         self::assertStringNotContainsString('golb-pagination', $html);
     }
 
@@ -152,7 +154,7 @@ final class BlogControllerTest extends FunctionalTestCase
 
         $html = $this->render();
 
-        self::assertSame(2, substr_count($html, '<article class="golb-post">'));
+        self::assertSame(2, substr_count($html, '<article class="golb-post golb-post--teaser'));
         self::assertStringContainsString('golb-pagination', $html);
         self::assertStringContainsString('First post', $html);
         self::assertStringNotContainsString('Second post', $html);
@@ -160,7 +162,7 @@ final class BlogControllerTest extends FunctionalTestCase
 
         $html = $this->render(['tx_golb_listview[demand][currentPage]' => 2]);
 
-        self::assertSame(1, substr_count($html, '<article class="golb-post">'));
+        self::assertSame(1, substr_count($html, '<article class="golb-post golb-post--teaser'));
         self::assertStringContainsString('Second post', $html);
         self::assertStringContainsString('aria-current="page"', $html);
     }
@@ -200,7 +202,7 @@ final class BlogControllerTest extends FunctionalTestCase
         $this->createPlugin('golb_latestview', '2', ['limit' => 1]);
 
         $html = $this->render();
-        self::assertSame(1, substr_count($html, '<article class="golb-post">'));
+        self::assertSame(1, substr_count($html, '<article class="golb-post golb-post--teaser'));
         self::assertStringContainsString('First post', $html);
         self::assertStringNotContainsString('golb-pagination', $html);
 
@@ -208,7 +210,7 @@ final class BlogControllerTest extends FunctionalTestCase
         $this->createPlugin('golb_latestview', '2', ['limit' => 0, 'topPosts' => 'topPosts']);
 
         $html = $this->render();
-        self::assertSame(1, substr_count($html, '<article class="golb-post">'));
+        self::assertSame(1, substr_count($html, '<article class="golb-post golb-post--teaser'));
         self::assertStringContainsString('Third post', $html);
     }
 
@@ -231,7 +233,7 @@ final class BlogControllerTest extends FunctionalTestCase
 
         $html = $this->render(['tx_golb_listview[demand][tag]' => 1]);
 
-        self::assertSame(3, substr_count($html, '<article class="golb-post">'));
+        self::assertSame(3, substr_count($html, '<article class="golb-post golb-post--teaser'));
     }
 
     #[Test]
@@ -242,7 +244,60 @@ final class BlogControllerTest extends FunctionalTestCase
         $html = $this->render();
 
         self::assertStringContainsString('by Zoe', $html);
-        self::assertStringContainsString('typo3', $html);
+        self::assertStringContainsString('<span class="golb-term">typo3</span>', $html);
         self::assertStringContainsString('datetime="1970-01-01"', $html);
+        self::assertStringContainsString('Read more', $html);
+        self::assertStringNotContainsString('golb-flag', $html, 'the first post is neither top post nor archived');
+    }
+
+    #[Test]
+    public function postPartialRendersFlagsAndLeavesThemOutWhenDisabled(): void
+    {
+        $this->createPlugin('golb_listview', '2');
+
+        $html = $this->render();
+
+        self::assertStringContainsString('golb-post--top', $html);
+        self::assertStringContainsString('<span class="golb-flag golb-flag--top">Top post</span>', $html);
+        self::assertStringContainsString('<span class="golb-flag golb-flag--archived">Archived</span>', $html);
+
+        $html = $this->render(['golbSettings' => 'show.flags=0']);
+
+        self::assertStringContainsString('golb-post--top', $html, 'the modifier class stays');
+        self::assertStringNotContainsString('golb-flag', $html);
+    }
+
+    #[Test]
+    public function defaultStylesheetIsAddedOnceAndCanBeDisabled(): void
+    {
+        $this->createPlugin('golb_listview', '2');
+        $this->createPlugin('golb_latestview', '2', [], [], 101);
+
+        $html = $this->render();
+
+        self::assertSame(1, substr_count($html, 'Resources/Public/Css/golb.css'));
+
+        $html = $this->render(['golbSettings' => 'includeCss=0']);
+
+        self::assertStringNotContainsString('golb.css', $html);
+        self::assertStringContainsString('<div class="golb">', $html);
+    }
+
+    #[Test]
+    public function termsLinkToTheFilteredListWhenEnabled(): void
+    {
+        $this->createPlugin('golb_listview', '2', ['allowDemandOverwrite' => 1]);
+
+        $html = $this->render(['golbSettings' => 'filterLinks.enabled=1']);
+
+        self::assertStringContainsString('class="golb-term golb-term--link"', $html);
+        self::assertStringContainsString('tx_golb_listview%5Bdemand%5D%5Btag%5D=2', $html);
+        self::assertStringContainsString('tx_golb_listview%5Bdemand%5D%5Bcategory%5D=1', $html);
+        self::assertStringNotContainsString('golb-filter', $html, 'no filter is active');
+
+        $html = $this->render(['tx_golb_listview[demand][tag]' => 1, 'golbSettings' => 'filterLinks.enabled=1']);
+
+        self::assertSame(1, substr_count($html, '<article class="golb-post golb-post--teaser'));
+        self::assertStringContainsString('Show all posts', $html);
     }
 }

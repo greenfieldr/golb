@@ -15,6 +15,8 @@ namespace Greenfieldr\Golb\Tests\Unit\Domain\Model;
 use Greenfieldr\Golb\Domain\Model\Page;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 #[CoversClass(Page::class)]
@@ -74,6 +76,24 @@ final class PageTest extends UnitTestCase
         self::assertFalse($page->isArchived());
         self::assertFalse($page->isTopPost());
         self::assertNull($page->getAuthorImage());
+    }
+
+    #[Test]
+    public function firstMediaReturnsTheFirstFileOrNull(): void
+    {
+        $page = new Page();
+
+        self::assertNull($page->getFirstMedia());
+
+        $first = new FileReference();
+        $second = new FileReference();
+        /** @var ObjectStorage<FileReference> $media */
+        $media = new ObjectStorage();
+        $media->attach($first);
+        $media->attach($second);
+        $page->setMedia($media);
+
+        self::assertSame($first, $page->getFirstMedia());
     }
 
     #[Test]
