@@ -1,0 +1,11 @@
+"pages",,,,,,,,,,,,
+,"uid","pid","sorting","title","doktype","sys_language_uid","hidden","fe_group","extendToSubpages","crdate","tstamp","tx_golb_publish_date"
+,20,1,10,"Restricted blog",1,0,0,"",0,1000,1000,0
+,21,20,10,"Public post",41,0,0,"",0,1000,1000,1000
+,22,20,20,"Members area (extend to subpages)",1,0,0,"-2",1,1000,1000,0
+,23,22,10,"Post below the members area",41,0,0,"",0,1000,1000,2000
+,24,20,30,"Members only post",41,0,0,"-2",0,1000,1000,3000
+,25,20,40,"Hidden section",1,0,1,"",0,1000,1000,0
+,26,25,10,"Post below the hidden section",41,0,0,"",0,1000,1000,4000
+,27,20,50,"Members area",1,0,0,"-2",0,1000,1000,0
+,28,27,10,"Post below the unprotected members area",41,0,0,"",0,1000,1000,5000

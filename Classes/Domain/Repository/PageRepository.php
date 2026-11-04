@@ -17,8 +17,7 @@ use Greenfieldr\Golb\Domain\Model\Category;
 use Greenfieldr\Golb\Domain\Model\Dto\PostsDemand;
 use Greenfieldr\Golb\Domain\Model\Page;
 use Greenfieldr\Golb\Domain\Model\Tag;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository as CorePageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -26,11 +25,22 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 /**
  * Finds blog posts (pages with the golb doktype) below given root pages.
  *
+ * The page tree below the root pages is walked with the core page repository,
+ * which applies the frontend access rules (hidden, start and end time and
+ * frontend groups of a page, "extend to subpages" of its parents, workspace
+ * versions, mount points). The posts among these pages are loaded through
+ * Extbase, which takes care of the language overlays and fallbacks.
+ *
  * @extends Repository<Page>
  */
 class PageRepository extends Repository
 {
-    public function __construct(private readonly ConnectionPool $connectionPool)
+    /**
+     * Levels of the page tree below a root page that are searched for posts
+     */
+    protected const TREE_DEPTH = 99;
+
+    public function __construct(private readonly CorePageRepository $pageRepository)
     {
         parent::__construct();
     }
@@ -97,82 +107,57 @@ class PageRepository extends Repository
 
     /**
      * Returns the uids of all pages below the given root pages (recursively,
-     * root pages themselves excluded). In a non-default language the uids of
-     * the translated pages are returned.
+     * root pages themselves excluded) that are accessible for the current
+     * frontend user. Hidden, time restricted and group restricted pages are
+     * left out; if such a page has "extend to subpages" set, its whole
+     * subtree is left out as well. Workspace versions and mount points are
+     * resolved. The root pages themselves are not checked.
+     *
+     * The uids are those of the default language pages, also in a translated
+     * frontend; Extbase overlays the translations when the posts are loaded.
      *
      * @param int[] $rootPages
      * @return int[]
      */
     public function findSubPagesByPageIds(array $rootPages): array
     {
-        $parentIds = array_values(array_unique(array_filter(
-            array_map(abs(...), $rootPages),
-            static fn(int $id): bool => $id > 0
-        )));
         $pageIds = [];
-        while ($parentIds !== []) {
-            $queryBuilder = $this->connectionPool->getQueryBuilderForTable('pages');
-            $children = $queryBuilder
-                ->select('uid')
-                ->from('pages')
-                ->where(
-                    $queryBuilder->expr()->in(
-                        'pid',
-                        $queryBuilder->createNamedParameter($parentIds, Connection::PARAM_INT_ARRAY)
-                    ),
-                    $queryBuilder->expr()->eq(
-                        'sys_language_uid',
-                        $queryBuilder->createNamedParameter(0, Connection::PARAM_INT)
-                    )
-                )
-                ->executeQuery()
-                ->fetchFirstColumn();
-            // Guard against cycles (e.g. via mount points) by ignoring known uids
-            $children = array_values(array_diff($this->toIntegerList($children), $pageIds));
-            $pageIds = array_merge($pageIds, $children);
-            $parentIds = $children;
+        foreach ($this->toIntegerList(array_map(abs(...), $rootPages)) as $rootPage) {
+            $pageIds = array_merge(
+                $pageIds,
+                $this->pageRepository->getDescendantPageIdsRecursive($rootPage, static::TREE_DEPTH)
+            );
         }
 
-        $language = $this->defaultQuerySettings->getLanguageAspect()->getContentId();
-        if ($language > 0 && $pageIds !== []) {
-            $queryBuilder = $this->connectionPool->getQueryBuilderForTable('pages');
-            $pageIds = $queryBuilder
-                ->select('uid')
-                ->from('pages')
-                ->where(
-                    $queryBuilder->expr()->eq(
-                        'sys_language_uid',
-                        $queryBuilder->createNamedParameter($language, Connection::PARAM_INT)
-                    ),
-                    $queryBuilder->expr()->in(
-                        'l10n_parent',
-                        $queryBuilder->createNamedParameter($pageIds, Connection::PARAM_INT_ARRAY)
-                    )
-                )
-                ->executeQuery()
-                ->fetchFirstColumn();
-        }
-
-        return array_values(array_unique($this->toIntegerList($pageIds)));
+        return $this->toIntegerList($pageIds);
     }
 
     /**
-     * @param list<mixed> $values
-     * @return list<int>
+     * @param array<mixed> $values
+     * @return list<int> the unique positive integers among the values, in order
      */
     protected function toIntegerList(array $values): array
     {
         $integers = [];
         foreach ($values as $value) {
             if (is_int($value) || (is_string($value) && is_numeric($value))) {
-                $integers[] = (int)$value;
+                $integer = (int)$value;
+                if ($integer > 0) {
+                    $integers[$integer] = $integer;
+                }
             }
         }
 
-        return $integers;
+        return array_values($integers);
     }
 
     /**
+     * Loads the blog posts among the accessible pages below the root pages.
+     * Default language posts are matched by their uid, translated posts
+     * (Extbase selects them directly in the strict and free language modes)
+     * by their translation parent, so Extbase applies the language overlay
+     * and fallback rules of the current language aspect.
+     *
      * @param int[] $rootPages
      * @return Page[]
      */
@@ -186,7 +171,10 @@ class PageRepository extends Repository
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(
-                $query->in('uid', $pageIds),
+                $query->logicalOr(
+                    $query->in('uid', $pageIds),
+                    $query->in('l10n_parent', $pageIds)
+                ),
                 $query->equals('doktype', Constants::BLOG_POST_DOKTYPE)
             )
         );

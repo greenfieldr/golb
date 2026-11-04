@@ -18,6 +18,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
+use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequestContext;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -109,15 +110,20 @@ final class BlogControllerTest extends FunctionalTestCase
      * @param array<string, int|string> $queryParameters flat parameter names, e.g. "tx_golb_listview[demand][tag]";
      *                                                   "golbSettings" overrides plugin.tx_golb.settings for the
      *                                                   request, see the Rendering.typoscript fixture
+     * @param int|null $frontendUserId uid of a fe_users record to log in for the request
      */
-    private function render(array $queryParameters = []): string
+    private function render(array $queryParameters = [], ?int $frontendUserId = null): string
     {
         $request = (new InternalRequest())->withPageId(1);
         foreach ($queryParameters as $name => $value) {
             $request = $request->withQueryParameter($name, $value);
         }
+        $context = new InternalRequestContext();
+        if ($frontendUserId !== null) {
+            $context = $context->withFrontendUserId($frontendUserId);
+        }
 
-        return (string)$this->executeFrontendSubRequest($request)->getBody();
+        return (string)$this->executeFrontendSubRequest($request, $context)->getBody();
     }
 
     #[Test]
@@ -145,6 +151,23 @@ final class BlogControllerTest extends FunctionalTestCase
 
         self::assertStringContainsString('No blog posts found.', $html);
         self::assertStringNotContainsString('golb-post', $html);
+    }
+
+    #[Test]
+    public function postsBelowGroupRestrictedPagesAreListedToLoggedInUsersOnly(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/RestrictedPages.csv');
+        $this->createPlugin('golb_listview', '20');
+
+        $html = $this->render();
+
+        self::assertStringContainsString('Public post', $html);
+        self::assertStringNotContainsString('Members only post', $html);
+
+        $html = $this->render([], 1);
+
+        self::assertStringContainsString('Public post', $html);
+        self::assertStringContainsString('Members only post', $html);
     }
 
     #[Test]

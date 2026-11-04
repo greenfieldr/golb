@@ -45,7 +45,8 @@ Repositories
     ``findByTags(array $rootPages, array $tagTitles, array $exclude, int $limit)``
     returns related posts ranked by the number of shared tags.
     ``findSubPagesByPageIds(array $rootPages): int[]`` returns the uids of
-    all visible pages below the root pages.
+    all pages below the root pages that the current frontend user may
+    access (uids of the default language pages).
 
 :php:`\Greenfieldr\Golb\Domain\Repository\TagRepository`
     ``findAll()`` and ``findAllWithAtLeastOneBlogPost()`` for tag clouds
@@ -63,21 +64,31 @@ listing define the scope.
 How posts are collected
 =======================
 
-#.  The uids of all pages below the root pages are collected level by
-    level with the QueryBuilder. Hidden, deleted and time restricted pages
-    are skipped together with their sub pages. In a translated frontend
-    the uids of the translated pages are used.
-#.  Pages of the blog post doktype are loaded through Extbase, so enable
-    fields, language overlays and lazy relations are handled by Extbase.
+#.  The uids of all pages below the root pages are collected with the
+    core API :php:`PageRepository::getDescendantPageIdsRecursive()`, which
+    applies the access rules of the frontend: deleted, hidden, time
+    restricted and frontend group restricted pages are skipped, and if
+    such a page has :guilabel:`Extend to subpages` set, its whole subtree
+    is skipped as well. A hidden or restricted page without this flag
+    hides only itself; the posts below it stay listed, as they are
+    reachable in the frontend. Workspace versions and mount points are
+    resolved. The root pages themselves are not checked. The uids are
+    those of the default language pages, also in a translated frontend.
+#.  Pages of the blog post doktype among these uids (translated posts are
+    matched by their translation parent) are loaded through Extbase, so
+    enable fields, language overlays and lazy relations are handled by
+    Extbase. With the site language setting ``fallbackType: fallback``
+    untranslated posts stay visible in the default language, with
+    ``strict`` and ``free`` they are left out.
 #.  Posts are sorted and filtered in PHP: by excluded uids, archived and
     top post flags, categories (including sub categories) and tags.
 #.  Offset and limit are applied to the result. The list view sets the
     limit to ``0`` and paginates the full result with an
     :php:`ArrayPaginator`.
 
-This keeps the extension independent of SQL dialects and handles the
-page tree, but it loads all posts of the root pages. For blogs with many
-thousands of posts consider caching the plugin output.
+This keeps the listing consistent with the page tree and the access
+rules of the frontend, but it loads all posts of the root pages. For
+blogs with many thousands of posts consider caching the plugin output.
 
 ..  _developer-extending:
 

@@ -1,0 +1,12 @@
+"pages",,,,,,,,,,,,,
+,"uid","pid","sorting","title","slug","doktype","sys_language_uid","hidden","fe_group","extendToSubpages","crdate","tstamp","tx_golb_publish_date"
+,20,1,10,"Restricted blog","/restricted",1,0,0,"",0,1000,1000,0
+,21,20,10,"Public post","/restricted/public-post",41,0,0,"",0,1000,1000,1000
+,22,20,20,"Members area","/restricted/members",1,0,0,"-2",1,1000,1000,0
+,23,22,10,"Members only post","/restricted/members/members-only-post",41,0,0,"",0,1000,1000,2000
+"fe_groups",,,,,,,,,,,,,
+,"uid","pid","title",,,,,,,,,,
+,1,1,"Members",,,,,,,,,,
+"fe_users",,,,,,,,,,,,,
+,"uid","pid","username","password","usergroup",,,,,,,,
+,1,1,"member","",1,,,,,,,,
