@@ -9,11 +9,9 @@
  */
 
 use Greenfieldr\Golb\Constants;
-use TYPO3\CMS\Core\DataHandling\PageDoktypeRegistry;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 defined('TYPO3') || die();
 
@@ -169,11 +167,6 @@ $boot = function () {
             ],
         ],
     ];
-
-    GeneralUtility::makeInstance(PageDoktypeRegistry::class)->add(Constants::BLOG_POST_DOKTYPE, [
-        'type' => 'web',
-        'allowedTables' => '*',
-    ]);
 
     ExtensionManagementUtility::addTCAcolumns('pages', $tempColumns);
     ExtensionManagementUtility::addToAllTCAtypes(
