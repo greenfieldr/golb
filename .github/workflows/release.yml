@@ -33,6 +33,15 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
 
+      # TER rejects an upload whose version differs from ext_emconf.php.
+      - name: Check ext_emconf.php version
+        run: |
+          emconf=$(php -r '$_EXTKEY = "golb"; $EM_CONF = []; require "ext_emconf.php"; echo $EM_CONF[$_EXTKEY]["version"];')
+          if [ "$emconf" != "${{ steps.version.outputs.version }}" ]; then
+            echo "::error::ext_emconf.php has version $emconf, the tag is ${{ steps.version.outputs.version }}"
+            exit 1
+          fi
+
       - name: Generate release notes
         uses: orhun/git-cliff-action@v4
         id: changelog
