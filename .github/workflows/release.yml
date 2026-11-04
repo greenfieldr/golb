@@ -42,12 +42,28 @@ jobs:
             exit 1
           fi
 
+      # --current renders the release of the pushed tag; --latest would pick
+      # the newest tag of the whole repository by commit date, which is the
+      # tag of another release branch when both lines are released together.
+      # --use-branch-tags only considers the tags reachable from the pushed
+      # tag, so the previous release of the same line starts the range.
       - name: Generate release notes
         uses: orhun/git-cliff-action@v4
         id: changelog
         with:
           config: cliff.toml
-          args: --latest --strip header
+          args: --current --use-branch-tags --strip header
+
+      # The notes of the wrong release would end up on GitHub and in TER.
+      - name: Check release notes version
+        env:
+          RELEASE_NOTES: ${{ steps.changelog.outputs.content }}
+        run: |
+          if ! printf '%s\n' "$RELEASE_NOTES" | head -n 1 | grep -qF "[${{ steps.version.outputs.version }}]"; then
+            echo "::error::The release notes do not start with version ${{ steps.version.outputs.version }}"
+            printf '%s\n' "$RELEASE_NOTES" | head -n 3
+            exit 1
+          fi
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
