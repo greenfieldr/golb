@@ -17,7 +17,9 @@ abstract, categories and tags, a card grid for the latest posts, a detail
 rendering of the post page (`lib.golb.post`) with related posts and
 Open Graph / article meta tags, and a plain stylesheet without framework or
 brand colours that adapts to the site. Every piece can be switched off,
-overridden or replaced with your own templates and CSS.
+overridden or replaced with your own templates and CSS. A route enhancer
+configuration for speaking URLs of the pagination and the category and tag
+filters is shipped ready to import into the site configuration.
 
 ## Compatibility
 

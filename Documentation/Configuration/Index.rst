@@ -231,37 +231,111 @@ given fall back to the plugin settings.
     *   -   ``demand[archived]``, ``demand[topPost]``, ...
         -   Boolean flags
 
-For speaking URLs map the arguments with the
-:ref:`routing configuration <t3coreapi:routing-advanced-routing-configuration>`
-of the site, for example:
+For speaking URLs see :ref:`configuration-routing`.
+
+..  _configuration-routing:
+
+Speaking URLs
+=============
+
+The extension ships a route enhancer configuration for the List view plugin
+in :file:`EXT:golb/Configuration/Routing/RouteEnhancers.yaml`. Import it
+into the site configuration and restrict the enhancer to the pages holding
+a List view plugin; the imported configuration is merged with the site
+configuration, so single keys can be added or changed below the import
+(see the :ref:`routing configuration <t3coreapi:routing-advanced-routing-configuration>`
+of TYPO3 for all options):
 
 ..  code-block:: yaml
     :caption: config/sites/main/config.yaml
 
+    imports:
+      - { resource: 'EXT:golb/Configuration/Routing/RouteEnhancers.yaml' }
+
     routeEnhancers:
-      GolbTag:
+      GolbList:
+        limitToPages: [12]
+
+The links of the pagination partial and the category and tag links of the
+default templates then look like this (plugin on the page :samp:`/blog`):
+
+..  list-table::
+    :header-rows: 1
+
+    *   -   URL
+        -   Arguments
+    *   -   :samp:`/blog`
+        -   first page without arguments, also the target of the
+            :guilabel:`Show all posts` link
+    *   -   :samp:`/blog/page/2`
+        -   ``demand[currentPage]=2``
+    *   -   :samp:`/blog/tag/typo3`
+        -   ``demand[tag]`` with the uid of the tag whose slug is ``typo3``
+    *   -   :samp:`/blog/tag/typo3/page/2`
+        -   tag and pagination
+    *   -   :samp:`/blog/category/News-7`
+        -   ``demand[category]=7``
+    *   -   :samp:`/blog/category/News-7/page/2`
+        -   category and pagination
+
+The filters require :guilabel:`Allow demand overwrite` in the plugin. The
+Latest view plugin does not generate URL parameters: its category and tag
+links point to the List view plugin and use these routes. Tags are mapped
+by their slug field. System categories have no slug, so the category routes
+carry the title and the uid of the record. Copy the file into the site
+configuration instead of importing it if you want to change the paths or
+the aspects, for example to map categories by a slug field of your own.
+
+The complete configuration:
+
+..  code-block:: yaml
+    :caption: EXT:golb/Configuration/Routing/RouteEnhancers.yaml
+
+    routeEnhancers:
+      GolbList:
         type: Extbase
         extension: Golb
         plugin: ListView
         routes:
-          - routePath: '/tag/{tag}'
+          - routePath: '/'
             _controller: 'Blog::list'
-            _arguments:
-              tag: 'demand/tag'
           - routePath: '/page/{page}'
             _controller: 'Blog::list'
             _arguments:
               page: 'demand/currentPage'
+          - routePath: '/tag/{tag}'
+            _controller: 'Blog::list'
+            _arguments:
+              tag: 'demand/tag'
+          - routePath: '/tag/{tag}/page/{page}'
+            _controller: 'Blog::list'
+            _arguments:
+              tag: 'demand/tag'
+              page: 'demand/currentPage'
+          - routePath: '/category/{category}'
+            _controller: 'Blog::list'
+            _arguments:
+              category: 'demand/category'
+          - routePath: '/category/{category}/page/{page}'
+            _controller: 'Blog::list'
+            _arguments:
+              category: 'demand/category'
+              page: 'demand/currentPage'
         defaultController: 'Blog::list'
         aspects:
+          page:
+            type: StaticRangeMapper
+            start: '1'
+            end: '999'
           tag:
             type: PersistedAliasMapper
             tableName: tx_golb_domain_model_tag
             routeFieldName: slug
-          page:
-            type: StaticRangeMapper
-            start: '1'
-            end: '100'
+          category:
+            type: PersistedPatternMapper
+            tableName: sys_category
+            routeFieldPattern: '^(?P<title>.+)-(?P<uid>\d+)$'
+            routeFieldResult: '{title}-{uid}'
 
 ..  _configuration-tsconfig:
 
