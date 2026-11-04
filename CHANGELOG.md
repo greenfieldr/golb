@@ -5,7 +5,7 @@ file. The format is based on conventional commits; the major version
 follows the supported TYPO3 major version (13.x.x for TYPO3 13, 14.x.x
 for TYPO3 14). The file is regenerated with git-cliff on every release.
 
-## [Unreleased]
+## [13.0.0] - 2026-11-04
 
 ### Features
 
@@ -21,6 +21,11 @@ for TYPO3 14). The file is regenerated with git-cliff on every release.
   added by the `MetaInformationProcessor` option `metaTags`
 - **model:** `Page::getFirstMedia()` returns the first file of the
   "Media" field
+- **routing:** Route enhancer configuration
+  (`Configuration/Routing/RouteEnhancers.yaml`) for the List view plugin
+  that can be imported into the site configuration: speaking URLs for
+  the pagination (`/page/2`), the tag filter (`/tag/<slug>`), the
+  category filter (`/category/<title>-<uid>`) and their combinations
 
 ### Bug fixes
 
@@ -32,6 +37,9 @@ for TYPO3 14). The file is regenerated with git-cliff on every release.
   modification date, title), duplicate posts in several categories,
   category traversal and the demand object
 - **templates:** Render the paginated list and repair pagination links
+- Register the blog post page type in `ext_tables.php`: on a cold cache
+  the `PageDoktypeRegistry` snapshots the TCA schema before the TCA
+  override runs, so content elements were not allowed on blog post pages
 
 ### Refactoring
 
@@ -47,6 +55,8 @@ for TYPO3 14). The file is regenerated with git-cliff on every release.
 - Add composer dev tooling (php-cs-fixer, PHPStan, Rector, Fractor,
   testing framework) and QA configuration
 - Add GitHub Actions workflows for QA, commit linting and releases
+- Add `ext_emconf.php` for TER uploads and classic installations; the
+  release workflow checks its version against the tag
 
 ### Breaking changes
 
@@ -61,6 +71,6 @@ for TYPO3 14). The file is regenerated with git-cliff on every release.
   `QueryResult`; `DemandInterface` is removed
 - `PageRepository::findPosts()` always sorts, by default by publish date
   descending
-- `ext_tables.php` and the `addUserTSConfig()` call are removed (the
-  page type is registered in the TCA override, user TSconfig in
+- `ext_tables.php` is reduced to the page type registration and the
+  `addUserTSConfig()` call is removed (user TSconfig is in
   `Configuration/user.tsconfig`)
