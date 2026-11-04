@@ -1,0 +1,17 @@
+base: 'http://localhost/'
+languages:
+  -
+    title: English
+    enabled: true
+    languageId: 0
+    base: /
+    locale: en_US.UTF-8
+    navigationTitle: English
+    flag: us
+rootPageId: 1
+websiteTitle: ''
+imports:
+  - { resource: 'EXT:golb/Configuration/Routing/RouteEnhancers.yaml' }
+routeEnhancers:
+  GolbList:
+    limitToPages: [1]

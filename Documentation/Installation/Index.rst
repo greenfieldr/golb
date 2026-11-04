@@ -60,6 +60,16 @@ Setup
     style the markup yourself, and insert :typoscript:`lib.golb.post` in
     the page template to render post pages, see :ref:`templating`.
 
+#.  **Routing (optional):** Import the shipped route enhancer configuration
+    into the site configuration for speaking URLs of the pagination and
+    the category and tag filters, see :ref:`configuration-routing`:
+
+    ..  code-block:: yaml
+        :caption: config/sites/main/config.yaml
+
+        imports:
+          - { resource: 'EXT:golb/Configuration/Routing/RouteEnhancers.yaml' }
+
 #.  **Optional:** Decide where tags are stored. Tag records can be created
     in any page or folder; a dedicated "Tags" folder below the blog root
     is a common choice.
